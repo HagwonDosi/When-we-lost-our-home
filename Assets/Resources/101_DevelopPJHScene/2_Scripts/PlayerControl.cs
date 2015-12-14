@@ -38,9 +38,14 @@ public class PlayerControl : MonoBehaviour
             }
             else
             {
-                if (mSpeed > -mMaxSpeed && mSpeed < mMaxSpeed)
+                if (mSpeed >= -mMaxSpeed && mSpeed <= mMaxSpeed)
                 {
                     mSpeed += mController.StickVector.x;
+
+                    if (mSpeed < -mMaxSpeed)
+                        mSpeed = -mMaxSpeed;
+                    else if (mSpeed > mMaxSpeed)
+                        mSpeed = mMaxSpeed;
                 }
             }
 
