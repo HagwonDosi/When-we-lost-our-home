@@ -6,7 +6,9 @@ public class PlayerControl : MonoBehaviour
     public StickControl mController;
     public float mMaxSpeed = 0.1f;
     public float mRetardationSpeed = 0.01f;
+    public GameObject Gun = null;
 
+    private GameObject gun = null;
     private float mSpeed = 0;
 
 	// Use this for initialization
@@ -19,6 +21,10 @@ public class PlayerControl : MonoBehaviour
     {
         while(true)
         {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                
+            }
             if(mController.StickVector.Equals(Vector3.zero))
             {
                 if(mSpeed < 0)
