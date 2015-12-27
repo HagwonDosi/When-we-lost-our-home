@@ -11,7 +11,23 @@ public class ShowTextSlowly : MonoBehaviour
     public float mSecPerLetter = 0.05f; // 글자당 초 수
 
     private string mStrToShow = "NewLabel"; // 보여줄 전체 문자열
-	
+
+	/*
+     * 보여주게 될 전체 문자열을 다 보여주었을 때의 크기를 알아오는 함수
+    */
+    public Vector2 getFullSize()
+    {
+        string ori = mLabel.text;
+
+        mLabel.text = mStrToShow;
+        mLabel.GetComponent<UIWidget>().MakePixelPerfect();
+        var size = mLabel.localSize;
+
+        mLabel.text = ori;
+
+        return size;
+    }
+
     public void setNewString(string fStr)
     {
         if(mCanBeUsed)
