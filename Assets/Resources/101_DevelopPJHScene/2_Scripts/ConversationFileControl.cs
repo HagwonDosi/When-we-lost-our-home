@@ -6,9 +6,9 @@ using System.Collections.Generic;
 public class ConversationFileControl : MonoBehaviour
 {
     public string mFileName = "";
-    public SpeechBubbleControl mSpeechBubble = null;
+    public List<SpeechBubbleControl> mSpeechBubbles = new List<SpeechBubbleControl>();
 
-    private List<string> mListOfConvs = new List<string>();
+    public List<string> mListOfConvs = new List<string>();
 
 	// Use this for initialization
 	void Start ()
@@ -26,11 +26,12 @@ public class ConversationFileControl : MonoBehaviour
     /*
      * List 인덱스를 인자로 전달해서 해당 인덱스의 메세지를 말풍선에 출력
     */
-    public bool ShowTextByIndex(int fIndex)
+    public bool ShowTextByIndex(int fIndex, int fSIndex, float fDuration)
     {
-        if(fIndex > 0 && fIndex < mListOfConvs.Count)
+        if(fIndex >= 0 && fIndex < mListOfConvs.Count
+            && fSIndex >= 0 && fSIndex < mSpeechBubbles.Count)
         {
-            return mSpeechBubble.ShowText(mListOfConvs[fIndex], 2f);
+            return mSpeechBubbles[fSIndex].ShowText(mListOfConvs[fIndex], fDuration);
         }
         else
         {

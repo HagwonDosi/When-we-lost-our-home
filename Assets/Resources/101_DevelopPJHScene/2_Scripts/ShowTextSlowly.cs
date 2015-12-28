@@ -15,15 +15,16 @@ public class ShowTextSlowly : MonoBehaviour
 	/*
      * 보여주게 될 전체 문자열을 다 보여주었을 때의 크기를 알아오는 함수
     */
-    public Vector2 getFullSize()
+    public Vector2 getFullSize(string fStr)
     {
         string ori = mLabel.text;
 
-        mLabel.text = mStrToShow;
+        mLabel.text = fStr;
         mLabel.GetComponent<UIWidget>().MakePixelPerfect();
         var size = mLabel.localSize;
 
         mLabel.text = ori;
+        mLabel.GetComponent<UIWidget>().MakePixelPerfect();
 
         return size;
     }
@@ -40,6 +41,11 @@ public class ShowTextSlowly : MonoBehaviour
         {
             Debug.LogWarning("ShowTextSlowly at " + name + " Can't be Used.");
         }
+    }
+
+    public void ClearText()
+    {
+        mLabel.text = "";
     }
 
     IEnumerator UpdateShowingString()

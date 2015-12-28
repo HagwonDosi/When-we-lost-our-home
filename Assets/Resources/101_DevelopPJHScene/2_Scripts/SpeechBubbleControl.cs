@@ -13,27 +13,31 @@ public class SpeechBubbleControl : MonoBehaviour
     public UISprite mBackgroundSpr = null;
 
     private TweenScale mScale = null;
+    private UIWidget mWidget = null;
+    private bool isTalking = false;
 
 	// Use this for initialization
 	void Start ()
     {
-        mScale = GetComponent<TweenScale>();
+        mScale = mBackgroundSpr.GetComponent<TweenScale>();
         mScale.enabled = false;
+        mWidget = mBackgroundSpr.GetComponent<UIWidget>();
 
+        StartCoroutine(KeepBubblePlace());
         StartCoroutine(KeepBubblePlace());
 	}
 	
     IEnumerator KeepBubblePlace()
     {
         Vector2 OriSubjectPos = mCamera.WorldToScreenPoint(mSubject.transform.position);
-        Vector2 oriPos = transform.position;
+        Vector2 oriPos = transform.localPosition;
 
         while(true)
         {
             Vector2 curSubPos = mCamera.WorldToScreenPoint(mSubject.transform.position);
             Vector2 subDif = curSubPos - OriSubjectPos;
 
-            transform.position = oriPos + subDif;
+            transform.localPosition = oriPos + subDif;
 
             yield return null;
         }
@@ -41,28 +45,74 @@ public class SpeechBubbleControl : MonoBehaviour
 
     public bool ShowText(string fStr, float fSec)
     {
-        float mSec = (mText.mSecPerLetter * fStr.Length) + fSec + 0.1f;
+        if(!isTalking)
+        {
+            isTalking = true;
+            float sec = (mText.mSecPerLetter * fStr.Length) + fSec + 0.1f;
 
-        mScale.enabled = true;
-        mScale.from = new Vector3(0, 0, 0);
-        mScale.to = Vector3.one;
-        mScale.duration = 0.1f;
-        mScale.ResetToBeginning();
+            mScale.enabled = true;
+            mScale.from = new Vector3(0, 0, 0);
+            mScale.to = Vector3.one;
+            mScale.duration = 0.1f;
+            mScale.ResetToBeginning();
 
-        StartCoroutine(ReserveShowText(fStr));
+            SetBackgroundSprite(fStr);
 
-        return true;
+            StartCoroutine(ReserveShowText(fStr));
+            StartCoroutine(ReserveHideBubble(sec));
+
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning(gameObject.name + ".ShowText " + "isTaking is true");
+
+            return false;
+        }
     }
 
-    void SetBackgroundSprite()
+    void SetBackgroundSprite(string fStr)
     {
+        Vector2 size = mText.getFullSize(fStr);
+        mWidget.width = (int)(size.x) + 100;
+        mWidget.height = (int)(size.y) + 50;
+
         Vector2 oriPos = mBackgroundSpr.transform.localPosition;
-        var left = mBackgroundSpr.GetComponent<UIWidget>().leftAnchor;
+        float left = 0;
+        float right = 0;
+        float width = mWidget.width;
+
+        switch (mWidget.pivot)
+        {
+            case UIWidget.Pivot.BottomRight:
+                left = mBackgroundSpr.transform.localPosition.x + width;
+                right = mBackgroundSpr.transform.localPosition.x;
+
+                break;
+            case UIWidget.Pivot.BottomLeft:
+                left = mBackgroundSpr.transform.localPosition.x;
+                right = mBackgroundSpr.transform.localPosition.x + width;
+
+                break;
+        }
+
+        Vector2 sceneSize = GameDirector.Instance.getPanelSize();
+
+        if(sceneSize.x / 2 < right)
+        {
+            mWidget.pivot = UIWidget.Pivot.BottomRight;
+        }
+        else if( - sceneSize.x / 2 > left)
+        {
+            mWidget.pivot = UIWidget.Pivot.BottomLeft;
+        }
+
+        mBackgroundSpr.transform.localPosition = oriPos;
     }
 
     IEnumerator ReserveShowText(string fStr)
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
 
         mText.setNewString(fStr);
     }
@@ -71,6 +121,8 @@ public class SpeechBubbleControl : MonoBehaviour
     {
         yield return new WaitForSeconds(fSec);
 
+        isTalking = false;
+        mText.ClearText();
         mScale.enabled = true;
         mScale.from = Vector3.one;
         mScale.to = Vector3.zero;
