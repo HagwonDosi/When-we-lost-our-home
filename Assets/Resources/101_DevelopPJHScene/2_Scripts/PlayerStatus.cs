@@ -33,6 +33,17 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
+    public void AddHP(float fVal)
+    {
+        mHP += fVal;
+
+        // 범위를 벗어났나 검사
+        if (mHP < 0)
+            mHP = 0;
+        else if (mHP > 100f)
+            mHP = 100f;
+    }
+
 	// Use this for initialization
 	void Start ()
     {
