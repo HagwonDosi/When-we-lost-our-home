@@ -5,8 +5,9 @@ public class Enemy_Target : MonoBehaviour {
 
     public GameObject player = null;
     public GameObject enemy = null;
+    private Animator _animator;
 
-    public float enemy_speed = 0.4f;
+    float enemy_speed;
 
     public bool target = false;
     public bool Gun = false;
@@ -17,6 +18,7 @@ public class Enemy_Target : MonoBehaviour {
 	void Start () {
         StartCoroutine(UpdateSpeed());
         enemy_x = enemy.transform.localPosition.x;
+        _animator = this.gameObject.GetComponent<Animator>();
 
 	}
 
@@ -28,13 +30,41 @@ public class Enemy_Target : MonoBehaviour {
 
             if (target == true)
             {
+                enemy_speed = 0.4f;
                 if (enemy_x > (player_x + 0.8f))
+                {
+                    _animator.SetBool("M_Walk", true);
+                    _animator.SetBool("Monster_Attack_chek", false);
+                    _animator.speed = 1f;
+
+                    enemy.transform.localPosition = new Vector3(enemy_x -= enemy_speed * Time.deltaTime, enemy.transform.localPosition.y, enemy.transform.localPosition.z);//타겟안에 들어오면 플레이어쪽으로 감
+                    if (Gun == true)
+                    {
+                        
+                        enemy.transform.localPosition = new Vector3(enemy_x += 2.0f, enemy.transform.localPosition.y, enemy.transform.localPosition.z);//총에 맞으면 뒤로 밀림
+                    }
+                    
+                }
+                if (enemy_x - 0.1f < (player_x + 0.8f))
+                {
+                    enemy_speed = 0;
+                    attack = true;
+                    if (attack == true)
+                    {
+                        _animator.SetBool("M_Walk", false);
+                        _animator.SetBool("Monster_Attack_chek", true);
+                        _animator.speed = 0.5f; // 애니메이션 스피드 변경
+                        //공격에니메이션 적용
+                    }
+                }
+                else attack = false;
+                if (enemy_x < (player_x - 0.8f))
                 {
                     if (Gun == true)
                     {
-                        enemy.transform.localPosition = new Vector3(enemy_x += 2.0f, enemy.transform.localPosition.y, enemy.transform.localPosition.z);//총에 맞으면 뒤로 밀림
+                        enemy.transform.localPosition = new Vector3(enemy_x -= 2.0f, enemy.transform.localPosition.y, enemy.transform.localPosition.z);//총에 맞으면 뒤로 밀림
                     }
-                    if (enemy_x - 0.1f < (player_x + 0.8f))
+                    if (enemy_x + 0.1f > (player_x - 0.8f))
                     {
                         attack = true;
                         if (attack == true)
@@ -43,7 +73,7 @@ public class Enemy_Target : MonoBehaviour {
                         }
                     }
                     else attack = false;
-                    enemy.transform.localPosition = new Vector3(enemy_x -= enemy_speed * Time.deltaTime, enemy.transform.localPosition.y, enemy.transform.localPosition.z);//타겟안에 들어오면 플레이어쪽으로 감
+                    enemy.transform.localPosition = new Vector3(enemy_x += enemy_speed * Time.deltaTime, enemy.transform.localPosition.y, enemy.transform.localPosition.z);//타겟안에 들어오면 플레이어쪽으로 감
 
                 }
             }
