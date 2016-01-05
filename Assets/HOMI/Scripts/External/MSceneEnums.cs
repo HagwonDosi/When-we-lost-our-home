@@ -14,5 +14,6 @@ public enum E_H_RESOURCELOAD
     E_102_LogoScene,
     E_102_MenuScene,
     E_102_GameScene,
+    E_102_DeadScene,
     E_MAX
 }

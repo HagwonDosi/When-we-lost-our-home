@@ -5,15 +5,13 @@ using System.Collections.Generic;
 public class Inventory : MonoBehaviour
 {
     public GameObject inventory = null;
-    public GameObject Label1 = null;
-    public GameObject Label2 = null;
-    public int a;
-    public int b;
-    List<GameObject> items = new List<GameObject>();
+    public InvenData mData = null;
+    int a;
+    int b;
 	// Use this for initialization
 	void Start ()
     {
-        
+
 	}
 	
 	// Update is called once per frame
@@ -39,7 +37,26 @@ public class Inventory : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+    public void GetItem1()
+    {
+        mData.AddItem("CannedFood");
+    }
 
+    public void GetItem2()
+    {
+        mData.AddItem("SmokedFood");
+    }
+
+
+    public void LostItem1()
+    {
+        mData.RemoveItem("CannedFood");
+    }
+
+    public void LostItem2()
+    {
+        mData.RemoveItem("SmokedFood");
+    }
 
 
 }
