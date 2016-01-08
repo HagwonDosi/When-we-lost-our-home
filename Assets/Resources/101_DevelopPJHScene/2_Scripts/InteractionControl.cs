@@ -3,7 +3,8 @@ using System.Collections;
 
 public enum InteractionType
 {
-    Test
+    Test,
+    Door
 }
 
 /*
