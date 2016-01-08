@@ -34,8 +34,6 @@ public class NPC_Move : MonoBehaviour // NPC의 움직임
         {
             if (time.getTimeGap(SDay, STime) >= 1.0f)
             {
-                Debug.Log("SDay : ");
-                Debug.Log(time.Day);
                 SDay = time.Day;
                 STime = time.Hour;
             }
@@ -43,8 +41,6 @@ public class NPC_Move : MonoBehaviour // NPC의 움직임
 
             if (Rand_go <= SDay && Chek == false)
             {
-                Debug.Log("Rand_go : ");
-                Debug.Log(Rand_go);
                 transform.localPosition = new Vector3(pos_x += Speed * Time.deltaTime, transform.localPosition.y, transform.localPosition.z);
             }
             yield return null;
@@ -55,8 +51,6 @@ public class NPC_Move : MonoBehaviour // NPC의 움직임
     {
         Chek = true;
         Rand_go += rand.Rand_GO;
-        Debug.Log("----------------------------------");
-        Debug.Log(Rand_go);
         transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z);
     }
 }

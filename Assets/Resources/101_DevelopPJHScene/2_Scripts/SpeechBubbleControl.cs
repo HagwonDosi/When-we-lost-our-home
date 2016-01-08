@@ -76,7 +76,6 @@ public class SpeechBubbleControl : MonoBehaviour
         Vector2 size = mText.getFullSize(fStr);
         mWidget.width = (int)(size.x) + 100;
         mWidget.height = (int)(size.y) + 50;
-
         Vector2 oriPos = mBackgroundSpr.transform.localPosition;
         float left = 0;
         float right = 0;

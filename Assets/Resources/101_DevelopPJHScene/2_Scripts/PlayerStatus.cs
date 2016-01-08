@@ -73,6 +73,10 @@ public class PlayerStatus : MonoBehaviour
 
         while(true)
         {
+            if(mHP <= 0)
+            {
+                Destroy(gameObject);
+            }
             //현재 시각과 이전 시각을 비교해서 1시간보다 크다면
             if(mTimer.getTimeGap(befDay, befTime) >= 1.0f)
             {
