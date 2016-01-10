@@ -16,6 +16,7 @@ public class GameTimer : MonoBehaviour
         }
     }
 
+    //시간계에서 하루가 현실세계의 몇 초인가
     public float mSecPerDay = 60f;
 
     private int mDay = 0;

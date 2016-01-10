@@ -3,7 +3,10 @@ using System.Collections;
 
 public enum InteractionType
 {
-    Test
+    Test,
+    Enemy,
+    Gun,
+    Knife
 }
 
 /*

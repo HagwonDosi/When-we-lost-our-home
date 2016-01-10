@@ -11,13 +11,15 @@ public class SpeechBubbleControl : MonoBehaviour
     public GameObject mSubject = null;
     public Camera mCamera = null;
     public UISprite mBackgroundSpr = null;
+    public float mStdWidth = 256f;
 
     private TweenScale mScale = null;
     private UIWidget mWidget = null;
     private bool isTalking = false;
 
-	// Use this for initialization
-	void Start ()
+    #region VirtualFunctions
+    // Use this for initialization
+    void Start()
     {
         mScale = mBackgroundSpr.GetComponent<TweenScale>();
         mScale.enabled = false;
@@ -25,14 +27,16 @@ public class SpeechBubbleControl : MonoBehaviour
 
         StartCoroutine(KeepBubblePlace());
         StartCoroutine(KeepBubblePlace());
-	}
-	
+    }
+    #endregion
+
+    #region CustomFunction
     IEnumerator KeepBubblePlace()
     {
         Vector2 OriSubjectPos = mCamera.WorldToScreenPoint(mSubject.transform.position);
         Vector2 oriPos = transform.localPosition;
 
-        while(true)
+        while (true)
         {
             Vector2 curSubPos = mCamera.WorldToScreenPoint(mSubject.transform.position);
             Vector2 subDif = curSubPos - OriSubjectPos;
@@ -45,10 +49,9 @@ public class SpeechBubbleControl : MonoBehaviour
 
     public bool ShowText(string fStr, float fSec)
     {
-        if(!isTalking)
+        if (!isTalking)
         {
             isTalking = true;
-            float sec = (mText.mSecPerLetter * fStr.Length) + fSec + 0.1f;
 
             mScale.enabled = true;
             mScale.from = new Vector3(0, 0, 0);
@@ -56,7 +59,11 @@ public class SpeechBubbleControl : MonoBehaviour
             mScale.duration = 0.1f;
             mScale.ResetToBeginning();
 
+            fStr = CutString(fStr);
             SetBackgroundSprite(fStr);
+
+            float sec = (mText.mSecPerLetter * fStr.Length) + fSec + 0.1f;
+            Debug.Log("string length " + (mText.mSecPerLetter * fStr.Length) + " sec " + fSec);
 
             StartCoroutine(ReserveShowText(fStr));
             StartCoroutine(ReserveHideBubble(sec));
@@ -71,6 +78,34 @@ public class SpeechBubbleControl : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 문자열의 크기에 따라 사이에 개행문자를 삽입하는 함수
+    /// </summary>
+    /// <param name="fStr">개행문자를 넣을 문자열</param>
+    /// <returns></returns>
+    private string CutString(string fStr)
+    {
+        int cutIdx = 0;
+        UIWidget lWidget = mText.mLabel.GetComponent<UIWidget>();
+        for (int i = 0; i < fStr.Length; i++)
+        {
+            int length = (i - cutIdx) + 1;
+            string test = new string(fStr.ToCharArray(), cutIdx, length);
+
+            Vector2 size = mText.getFullSize(test);
+
+            if (size.x > mStdWidth)
+            {
+                lWidget.width = 2;
+                cutIdx = i + 1;
+                fStr = fStr.Insert(i, "\n");
+                Debug.Log(fStr);
+            }
+        }
+
+        return fStr;
+    }
+
     void SetBackgroundSprite(string fStr)
     {
         Vector2 size = mText.getFullSize(fStr);
@@ -78,6 +113,7 @@ public class SpeechBubbleControl : MonoBehaviour
         mWidget.height = (int)(size.y) + 50;
 
         Vector2 oriPos = mBackgroundSpr.transform.localPosition;
+        Vector2 LOriPos = mText.mLabel.transform.localPosition;
         float left = 0;
         float right = 0;
         float width = mWidget.width;
@@ -98,15 +134,18 @@ public class SpeechBubbleControl : MonoBehaviour
 
         Vector2 sceneSize = GameDirector.Instance.getPanelSize();
 
-        if(sceneSize.x / 2 < right)
-        {
-            mWidget.pivot = UIWidget.Pivot.BottomRight;
-        }
-        else if( - sceneSize.x / 2 > left)
+        if (sceneSize.x / 2 < right)
         {
             mWidget.pivot = UIWidget.Pivot.BottomLeft;
+            mText.mLabel.GetComponent<UIWidget>().pivot = UIWidget.Pivot.Left;
+        }
+        else if (-sceneSize.x / 2 > left)
+        {
+            mText.mLabel.GetComponent<UIWidget>().pivot = UIWidget.Pivot.Right;
+            mWidget.pivot = UIWidget.Pivot.BottomRight;
         }
 
+        mText.mLabel.transform.localPosition = LOriPos;
         mBackgroundSpr.transform.localPosition = oriPos;
     }
 
@@ -121,6 +160,7 @@ public class SpeechBubbleControl : MonoBehaviour
     {
         yield return new WaitForSeconds(fSec);
 
+        mText.mLabel.GetComponent<UIWidget>().width = 2;
         isTalking = false;
         mText.ClearText();
         mScale.enabled = true;
@@ -129,4 +169,5 @@ public class SpeechBubbleControl : MonoBehaviour
         mScale.duration = 0.1f;
         mScale.ResetToBeginning();
     }
+    #endregion
 }
