@@ -31,7 +31,7 @@ public class InteractionTrigger : MonoBehaviour
         }
 	}
 
-    public void OnPress()
+    public void OnRelease()
     {
         if (mTrigger != null)
             mTrigger.Act();

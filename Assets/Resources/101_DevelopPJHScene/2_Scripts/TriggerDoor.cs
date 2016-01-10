@@ -3,10 +3,18 @@ using System.Collections;
 
 public class TriggerDoor : UITrigger
 {
-    public Animator mAnimator = null;
+    public CollisionTrigger mCTrigger = null;
 
     public override void Act()
     {
-        mAnimator.SetBool("Opened", !mAnimator.GetBool("Opened"));
+        if(CheckTime())
+        {
+            Animator animator = mCTrigger.ColliderObject.GetComponent<InteractionControl>().mSubject.GetComponent<Animator>();
+
+            animator.SetBool("Opened", !animator.GetBool("Opened"));
+
+            setTime();
+        }
+        
     }
 }

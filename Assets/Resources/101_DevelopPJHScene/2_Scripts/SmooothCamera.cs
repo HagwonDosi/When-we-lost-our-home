@@ -10,23 +10,30 @@ public class SmooothCamera : MonoBehaviour
     public float mSpeed = 10f;
     public Vector3 mOffset = Vector3.zero;
 
-	// Use this for initialization
-	void Start ()
+    #region VirtualFunction
+    // Use this for initialization
+    void Start()
     {
-        StartCoroutine(UpdateCo());
-	}
-	
-	IEnumerator UpdateCo()
-    {
-        while(true)
-        {
-            Vector3 pos = Vector3.Lerp(transform.position, mObject.position, Time.deltaTime * mSpeed);
-
-            pos += mOffset;
-
-            transform.position = new Vector3(pos.x, pos.y, transform.position.z);
-
-            yield return null;
-        }
+        GoImmediately();
     }
+
+    void Update()
+    {
+        MoveCamera();
+    }
+    #endregion
+
+    #region CustomFunction
+    public void GoImmediately()
+    {
+        transform.position = mOffset + new Vector3(mObject.transform.position.x, mObject.transform.position.y, mObject.transform.position.z - 2.7f);
+    }
+
+    private void MoveCamera()
+    {
+        Vector3 pos = Vector3.Lerp(transform.position, mObject.position + mOffset, Time.deltaTime * mSpeed);
+
+        transform.position = new Vector3(pos.x, pos.y, transform.position.z);
+    }
+    #endregion
 }

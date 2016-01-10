@@ -4,7 +4,9 @@ using System.Collections;
 public enum InteractionType
 {
     Test,
-    Door
+    Door,
+    Entrance,
+    Stair
 }
 
 /*
@@ -12,6 +14,6 @@ public enum InteractionType
 */ 
 public class InteractionControl : MonoBehaviour
 {
-
     public InteractionType mType;
+    public GameObject mSubject = null;
 }
