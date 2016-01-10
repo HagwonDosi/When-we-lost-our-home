@@ -42,7 +42,6 @@ public class Enemy_Target : MonoBehaviour {
                     enemy.transform.localPosition = new Vector3(enemy_x -= enemy_speed * Time.deltaTime, enemy.transform.localPosition.y, enemy.transform.localPosition.z);//타겟안에 들어오면 플레이어쪽으로 감
                     if (Gun == true)
                     {
-                        
                         enemy.transform.localPosition = new Vector3(enemy_x += 0.05f, enemy.transform.localPosition.y, enemy.transform.localPosition.z);//총에 맞으면 뒤로 밀림
                         Gun = false;
                     }
@@ -58,7 +57,11 @@ public class Enemy_Target : MonoBehaviour {
                         _animator.SetBool("M_Walk", false);
                         _animator.SetBool("Monster_Attack_chek", true);
                         _animator.speed = 0.5f; // 애니메이션 스피드 변경
-
+                        if (Gun == true)
+                        {
+                            enemy.transform.localPosition = new Vector3(enemy_x += 0.05f, enemy.transform.localPosition.y, enemy.transform.localPosition.z);//총에 맞으면 뒤로 밀림
+                            Gun = false;
+                        }
                         //공격에니메이션 적용
                     }
                 }
@@ -85,6 +88,11 @@ public class Enemy_Target : MonoBehaviour {
                             _animator.SetBool("M_Walk", false);
                             _animator.SetBool("Monster_Attack_chek", true);
                             _animator.speed = 0.5f;
+                            if (Gun == true)
+                            {
+                                enemy.transform.localPosition = new Vector3(enemy_x += 0.05f, enemy.transform.localPosition.y, enemy.transform.localPosition.z);//총에 맞으면 뒤로 밀림
+                                Gun = false;
+                            }
                         }
                     }
                    

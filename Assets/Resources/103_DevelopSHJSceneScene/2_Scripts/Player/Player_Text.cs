@@ -11,7 +11,7 @@ public class Player_Text : MonoBehaviour {
     public float fChek = 0.0f;
     public bool color_Chek = false;
     public Enemy_State Enemy;
-
+    public ConvTestTrigger con;
 
     Vector3 Pos_;
     int count = 0;
@@ -23,7 +23,6 @@ public class Player_Text : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
 	
 	}
 	
@@ -33,8 +32,10 @@ public class Player_Text : MonoBehaviour {
         Pos_ = player.transform.localPosition;
         player_Text.transform.localPosition = new Vector3(Pos_.x, Pos_.y + 0.72f, transform.localPosition.z);
         player_Hp = Hp.HP;
-        if(count == 0)
-        color_Chek = Enemy.player_Text_Chek;
+        if (count == 0)
+        {
+            color_Chek = Enemy.player_Text_Chek;
+        }
         if (color_Chek == true)
         {
             count = 1;

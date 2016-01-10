@@ -28,6 +28,7 @@ public class PlayerControl : MonoBehaviour
             if(mController.StickVector.Equals(Vector3.zero))
             {
                 Ani.SetBool("Player_Run", false);
+                Ani.SetBool("Player_Gun_Run", false);
                 if(mSpeed < 0 )
                 {
                     mSpeed += mRetardationSpeed;
@@ -46,6 +47,11 @@ public class PlayerControl : MonoBehaviour
                 if (mSpeed >= -mMaxSpeed && mSpeed <= mMaxSpeed)
                 {
                     Ani.SetBool("Player_Run", true);
+                    if (Ani.GetBool("Player_Monster") == true)
+                    {
+                        Ani.SetBool("Player_Gun_Run", true);
+                        mSpeed -= mController.StickVector.x / 2;
+                    }
                     mSpeed += mController.StickVector.x;
 
                     if (mSpeed < -mMaxSpeed && Player_Right == true)

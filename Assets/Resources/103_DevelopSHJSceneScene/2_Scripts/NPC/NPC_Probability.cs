@@ -32,7 +32,7 @@ public class NPC_Probability : MonoBehaviour //NPC의 랜덤확률
     {
         get
         {
-            return Rand_go;
+            return Rand_go = Random.Range(2, 4); ;
         }
     }
 
@@ -47,7 +47,7 @@ public class NPC_Probability : MonoBehaviour //NPC의 랜덤확률
         while (true)
         {
             Rand_txt = Random.Range(1, 10);
-            Rand_go = Random.Range(2, 4);
+            //Rand_go = Random.Range(2, 4);
             yield return null;
         }
     }

@@ -9,6 +9,6 @@ public class ConvTestTrigger : UITrigger
 
     public override void Act()
     {
-        mConvCon.ShowTextByIndex(mMessegeIndex, 0, 1f);   
+        mConvCon.ShowTextByIndex(mMessegeIndex, 0, mDuration);   
     }
 }

@@ -69,14 +69,7 @@ public class ShowTextSlowly : MonoBehaviour
                     curTime -= mSecPerLetter;
                     curIdx += 1;
 
-                    char[] str = new char[mStrToShow.Length];
-
-                    for(int i = 0; i < curIdx; i++)
-                    {
-                        str[i] = mStrToShow.ToCharArray()[i];
-                    }
-
-                    string outputStr = new string(str);
+                    string outputStr = new string(mStrToShow.ToCharArray(), 0, curIdx);
 
                     mLabel.text = outputStr;
                     mLabel.GetComponent<UIWidget>().MakePixelPerfect();
