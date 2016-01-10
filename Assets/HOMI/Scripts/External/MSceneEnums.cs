@@ -12,5 +12,9 @@ public enum E_H_RESOURCELOAD
     E_101_DevelopPJHScene,
     E_004_GameScene,
     E_103_DevelopSHJSceneScene,
+    E_102_LogoScene,
+    E_102_MenuScene,
+    E_102_GameScene,
+    E_102_DeadScene,
     E_MAX
 }
