@@ -6,7 +6,8 @@ public enum InteractionType
     Test,
     Door,
     Entrance,
-    Stair
+    Stair,
+    Exit
 }
 
 /*
