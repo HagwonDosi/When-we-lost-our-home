@@ -3,8 +3,15 @@ using System.Collections;
 
 public class GameDirector : MonoBehaviour
 {
+    #region Variables
     private static GameDirector mInstance = null;
 
+    public UIRoot mRoot = null;
+    public UIPanel mPanel = null;
+    public GameObject mPlayer = null;
+    #endregion
+
+    #region get/setter
     public static GameDirector Instance
     {
         get
@@ -15,12 +22,10 @@ public class GameDirector : MonoBehaviour
             return mInstance;
         }
     }
+    #endregion
 
-    public UIRoot mRoot = null;
-    public UIPanel mPanel = null;
-
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
 	
 	}
