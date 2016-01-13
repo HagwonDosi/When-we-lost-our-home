@@ -33,6 +33,17 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
+    public void AddHP(float fVal)
+    {
+        mHP += fVal;
+
+        // 범위를 벗어났나 검사
+        if (mHP < 0)
+            mHP = 0;
+        else if (mHP > 100f)
+            mHP = 100f;
+    }
+
 	// Use this for initialization
 	void Start ()
     {
@@ -62,6 +73,10 @@ public class PlayerStatus : MonoBehaviour
 
         while(true)
         {
+            if(mHP <= 0)
+            {
+                Destroy(gameObject);
+            }
             //현재 시각과 이전 시각을 비교해서 1시간보다 크다면
             if(mTimer.getTimeGap(befDay, befTime) >= 1.0f)
             {

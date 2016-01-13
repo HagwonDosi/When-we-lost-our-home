@@ -7,7 +7,10 @@ public enum InteractionType
     Door,
     Entrance,
     Stair,
-    Exit
+    Exit,
+    Enemy,
+    Gun,
+    Knife
 }
 
 /*

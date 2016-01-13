@@ -54,5 +54,6 @@ public class InteractionTrigger : MonoBehaviour
     public void InteractionTriggerExit()
     {
         mSprite.alpha = 0;
+        mTrigger = null;
     }
 }
