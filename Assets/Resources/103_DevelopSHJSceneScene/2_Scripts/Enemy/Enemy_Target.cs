@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy_Target : MonoBehaviour {
-
+public class Enemy_Target : MonoBehaviour
+{
     public GameObject player = null;
     public GameObject enemy = null;
     private Animator _animator;
@@ -21,7 +21,7 @@ public class Enemy_Target : MonoBehaviour {
 	void Start () {
         StartCoroutine(UpdateSpeed());
         enemy_x = enemy.transform.localPosition.x;
-        _animator = this.gameObject.GetComponent<Animator>();
+        _animator = gameObject.GetComponent<Animator>();
 
 	}
 

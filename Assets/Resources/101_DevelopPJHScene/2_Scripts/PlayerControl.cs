@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PlayerControl : MonoBehaviour
 {
+    #region Variables
     public StickControl mController;
     public float mMaxSpeed = 0.1f;
     public float mRetardationSpeed = 0.01f;
@@ -13,13 +14,17 @@ public class PlayerControl : MonoBehaviour
     private float Pos_x;
     private GameObject gun = null;
     private float mSpeed = 0;
+    #endregion
 
-	// Use this for initialization
-	void Start ()
+    #region VirtualFunctions
+    // Use this for initialization
+    void Start ()
     {
         StartCoroutine(UpdateSpeed());
 	}
-	
+    #endregion
+
+    #region CustomFunctions
     IEnumerator UpdateSpeed()
     {
         while(true)
@@ -81,4 +86,5 @@ public class PlayerControl : MonoBehaviour
 
         transform.localEulerAngles = Rote;
     }
+    #endregion
 }
