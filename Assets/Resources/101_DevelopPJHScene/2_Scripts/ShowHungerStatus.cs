@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
-/*
- * ShowPlayerStatus를 상속받는 스크립트이며 업데이트하며 배고픔 수치를 해당 스크립트에 대입해준다
-*/
+
+/// <summary>
+/// 플레이어의 배고픔을 표현할 이벤트를 말풍선으로 보내는 스크립트
+/// </summary>
 public class ShowHungerStatus : ShowPlayerStatus
 {
     public PlayerStatus mStatus = null;
 
 	// Use this for initialization
-	void Start ()
+	new void Start ()
     {
         StartCoroutine(UpdateCurVal());
-
-        base.Start();
 	}
 
     IEnumerator UpdateCurVal()

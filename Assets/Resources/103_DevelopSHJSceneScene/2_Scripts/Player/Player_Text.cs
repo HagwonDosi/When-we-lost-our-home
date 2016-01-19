@@ -10,7 +10,7 @@ public class Player_Text : MonoBehaviour {
     public float fTime = 2.0f;
     public float fChek = 0.0f;
     public bool color_Chek = false;
-    public Enemy_State Enemy;
+    public EnemyStatus Enemy;
     public ConvTestTrigger con;
 
     Vector3 Pos_;
@@ -34,7 +34,7 @@ public class Player_Text : MonoBehaviour {
         player_Hp = Hp.HP;
         if (count == 0)
         {
-            color_Chek = Enemy.player_Text_Chek;
+            //color_Chek = Enemy.player_Text_Chek;
         }
         if (color_Chek == true)
         {
