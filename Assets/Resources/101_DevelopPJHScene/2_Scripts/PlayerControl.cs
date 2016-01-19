@@ -8,6 +8,7 @@ public class PlayerControl : MonoBehaviour
     public float mMaxSpeed = 0.1f;
     public Animator mAnimator = null;
     public float mSpeed = 0;
+    public bool mCheckAni = true;
 
     private bool mFacingRight = true;
     private GameObject gun = null;
@@ -86,14 +87,11 @@ public class PlayerControl : MonoBehaviour
                     Flip();
                 }
                 
-                if(Mathf.Round(mRB.velocity.x) != 0)
+                if(mCheckAni)
                 {
-                    mAnimator.SetBool("Player_Run", true);
+                    mAnimator.SetFloat("Speed", (float)CustomMath.CustomRound(4, Mathf.Abs(mRB.velocity.x)));
                 }
-                else
-                {
-                    mAnimator.SetBool("Player_Run", false);
-                }
+                
             }
             yield return null;
         }

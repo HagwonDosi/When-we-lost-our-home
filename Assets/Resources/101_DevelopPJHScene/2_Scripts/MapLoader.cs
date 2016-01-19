@@ -168,8 +168,9 @@ public class MapLoader : MonoBehaviour
         {
             GameObject building = Instantiate(prefab, mBuildingPos.position, Quaternion.Euler(0, 0, 0)) as GameObject;
 
+            building.GetComponent<BuildingControl>().mBuildingName = fMapName;
             mCurBuilding = building;
-            mCurBuilding.GetComponent<BuildingControl>().SetPlayer();
+            //mCurBuilding.GetComponent<BuildingControl>().SetPlayer();
         }
         else
         {

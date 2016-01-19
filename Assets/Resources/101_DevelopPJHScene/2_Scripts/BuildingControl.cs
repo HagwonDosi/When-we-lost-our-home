@@ -13,6 +13,7 @@ public class BuildingControl : MonoBehaviour
     public Transform mPlayerPos = null;
     public string mBuildingName = "";
 
+    private GameObject mEntrance = null;
     private float mMaxFloor = 0f;
     private List<GameObject> mFloors = new List<GameObject>();
     #endregion
@@ -40,6 +41,17 @@ public class BuildingControl : MonoBehaviour
         {
             Debug.Log("Map Data doesn't exist");
         }
+
+        var objs = GameObject.FindObjectsOfType<Entrance>();
+        
+        for(int i = 0; i < objs.Length; i++)
+        {
+            if(objs[i].mEntranceTo.Equals(mBuildingName))
+            {
+                mEntrance = objs[i].gameObject;
+                break;
+            }
+        }
 	}
 	
 	// Update is called once per frame
@@ -66,6 +78,11 @@ public class BuildingControl : MonoBehaviour
     public void SetPlayer()
     {
         GameDirector.Instance.mPlayer.transform.position = mPlayerPos.transform.position;
+    }
+
+    public void PlayerExit()
+    {
+        GameDirector.Instance.mPlayer.transform.position = new Vector3(mEntrance.transform.position.x, mEntrance.transform.position.y + 0.1f, mEntrance.transform.position.z + 0.5f);
     }
 
     private void ReadData(string fPath)
