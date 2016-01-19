@@ -8,6 +8,7 @@ public class InteractionCollisionExitTrigger : UITrigger
 
     public override void Act()
     {
+        Debug.Log("interaction Exit");
         mITrigger.InteractionTriggerExit();
     }
 }

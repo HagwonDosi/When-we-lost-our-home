@@ -1,68 +1,68 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerStatus : MonoBehaviour
+public class PlayerStatus : Status
 {
     //플레이어가 위험 지역에 있는가
     public bool mIsPlayerInDanger = false;
-
-    private float mHP = 100f;           // HP
-    private float mHunger = 100f;       // 배고픔 수치
-    private float mThirsty = 100f;      // 갈증 수치
+    
     private GameTimer mTimer = null;
 
     public float HP
     {
         get
         {
-            return mHP;
+            return base.GetStatus("Health");
         }
     }
     public float Hunger
     {
         get
         {
-            return mHunger;
+            return base.GetStatus("Hunger");
         }
     }
     public float Thirsty
     {
         get
         {
-            return mThirsty;
+            return base.GetStatus("Thirst");
         }
-    }
-
-    public void AddHP(float fVal)
-    {
-        mHP += fVal;
-
-        // 범위를 벗어났나 검사
-        if (mHP < 0)
-            mHP = 0;
-        else if (mHP > 100f)
-            mHP = 100f;
     }
 
 	// Use this for initialization
 	void Start ()
     {
+        AddStatus("Health", new StatMinMax(100f, 0f, 100f));
+        AddStatus("Hunger", new StatMinMax(100f, 0f, 100f));
+        AddStatus("Thirst", new StatMinMax(100f, 0f, 100f));
         mTimer = GameTimer.Instance;
 
         StartCoroutine(UpdateStatus());
-	}
+    }
+
+    public void AddHP(float fVal)
+    {
+        SetStatus("Health", GetStatus("Health") + fVal);
+
+        // 범위를 벗어났나 검사
+        if (GetStatus("Health") < 0)
+            SetStatus("Health", 0);
+        else if (GetStatus("Health") > 100f)
+            SetStatus("Health", 100f);
+    }
 
     void OneHourPassed()
     {
         if(mIsPlayerInDanger)
         {
-            mHunger -= 2f;
-            mThirsty -= 2f;
+            SetStatus("Hunger", GetStatus("Hunger") - 2f);
+            SetStatus("Thirst", GetStatus("Thirst") - 2f);
         }
         else
         {
-            mHunger -= 1.4f;
-            mThirsty -= 1.4f;
+            SetStatus("Hunger", GetStatus("Hunger") - 1.4f);
+            SetStatus("Thirst", GetStatus("Thirst") - 1.4f);
         }
     }
 
@@ -73,10 +73,10 @@ public class PlayerStatus : MonoBehaviour
 
         while(true)
         {
-            if(mHP <= 0)
-            {
-                Destroy(gameObject);
-            }
+           // if(GetStatus("Health") <= 0)
+           // {
+           //     Destroy(gameObject);
+           // }
             //현재 시각과 이전 시각을 비교해서 1시간보다 크다면
             if(mTimer.getTimeGap(befDay, befTime) >= 1.0f)
             {
