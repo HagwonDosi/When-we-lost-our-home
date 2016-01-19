@@ -5,6 +5,7 @@ public class QuitTrigger : UITrigger
 {
     public PlayerControl mPCon = null;
     public Animator mAnimatr = null;
+    public MapLoader mLoader = null;
     public SmooothCamera mCamera = null;
 
     private float mSpeed = 0.01f;
@@ -72,7 +73,7 @@ public class QuitTrigger : UITrigger
         yield return new WaitForSeconds(0.3f);
         StopAllCoroutines();
         mPCon.mCheckAni = true;
-
+        Destroy(mLoader.CurBuiding);
         mAnimatr.SetFloat("Speed", 0f);
     }
 }
