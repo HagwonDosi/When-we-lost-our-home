@@ -9,7 +9,7 @@ public class PlayerAttackEnemy : UITrigger
 	// Use this for initialization
 	void Start ()
     {
-        mFightable = GameDirector.Instance.mPlayer.GetComponent<Fightable>();
+        mFightable = GameDirector.Instance.Player.GetComponent<Fightable>();
         mCTrigger = GetComponent<CollisionTrigger>();
 	}
 

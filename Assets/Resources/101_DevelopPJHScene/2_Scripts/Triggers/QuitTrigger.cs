@@ -17,7 +17,7 @@ public class QuitTrigger : UITrigger
     public override void Act()
     {
         mBuilCon = FindObjectOfType<BuildingControl>();
-        mPlayer = GameDirector.Instance.mPlayer;
+        mPlayer = GameDirector.Instance.Player;
         mTRot = mPlayer.GetComponent<TweenRotation>();
         mPCon.mCheckAni = false;
 

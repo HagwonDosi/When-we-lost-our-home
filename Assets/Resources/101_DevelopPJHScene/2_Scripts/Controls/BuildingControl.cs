@@ -77,12 +77,12 @@ public class BuildingControl : MonoBehaviour
 
     public void SetPlayer()
     {
-        GameDirector.Instance.mPlayer.transform.position = mPlayerPos.transform.position;
+        GameDirector.Instance.Player.transform.position = mPlayerPos.transform.position;
     }
 
     public void PlayerExit()
     {
-        GameDirector.Instance.mPlayer.transform.position = new Vector3(mEntrance.transform.position.x, mEntrance.transform.position.y + 0.1f, mEntrance.transform.position.z + 0.5f);
+        GameDirector.Instance.Player.transform.position = new Vector3(mEntrance.transform.position.x, mEntrance.transform.position.y + 0.1f, mEntrance.transform.position.z + 0.5f);
     }
 
     private void ReadData(string fPath)

@@ -6,9 +6,14 @@ public class GameDirector : MonoBehaviour
     #region Variables
     private static GameDirector mInstance = null;
 
-    public UIRoot mRoot = null;
-    public UIPanel mPanel = null;
-    public GameObject mPlayer = null;
+    [SerializeField]
+    private UIRoot mRoot = null;
+    [SerializeField]
+    private UIPanel mPanel = null;
+    [SerializeField]
+    private GameObject mPlayer = null;
+    [SerializeField]
+    private InvenData mPlayerInven = null;
     #endregion
 
     #region get/setter
@@ -22,6 +27,21 @@ public class GameDirector : MonoBehaviour
             return mInstance;
         }
     }
+    public GameObject Player
+    {
+        get
+        {
+            return mPlayer;
+        }
+    }
+    public InvenData PlayerInven
+    {
+        get
+        {
+            return mPlayerInven;
+        }
+    }
+
     #endregion
 
     #region VirtualFuntions

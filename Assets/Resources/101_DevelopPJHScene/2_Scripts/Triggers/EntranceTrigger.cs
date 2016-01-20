@@ -11,7 +11,7 @@ public class EntranceTrigger : UITrigger
     public SmooothCamera mCamera = null;
 
     private float mSpeed = 0.01f;
-    private float mDegDif = 0f;
+    private float mOriDeg = 0f;
     #endregion
 
     public override void Act()
@@ -39,15 +39,28 @@ public class EntranceTrigger : UITrigger
     /// <returns></returns>
     private IEnumerator WalkBackOutSide()
     {
-        GameObject player = GameDirector.Instance.mPlayer;
+        GameObject player = GameDirector.Instance.Player;
         TweenRotation tRot = player.GetComponent<TweenRotation>();
         tRot.enabled = true;
         tRot.from = player.transform.localEulerAngles;
-        tRot.to = new Vector3(player.transform.localEulerAngles.x, player.transform.localEulerAngles.y - 90, player.transform.localEulerAngles.z);
+
+        float target = 0f;
+        if (Mathf.Round(player.transform.localEulerAngles.y) == 90f)
+        {
+            mOriDeg = 90f;
+            target = 0f;
+        }
+        else if (Mathf.Round(player.transform.localEulerAngles.y) == 270)
+        {
+            mOriDeg = -90f;
+            target = 360f;
+        }
+
+        Debug.Log("target " + target);
+        tRot.to = new Vector3(player.transform.localEulerAngles.x, target, player.transform.localEulerAngles.z);
         tRot.duration = 0.3f;
         tRot.ResetToBeginning();
-
-        mDegDif = 0 - player.transform.localEulerAngles.y;
+        
         
         yield return new WaitForSeconds(0.3f);
 
@@ -73,7 +86,7 @@ public class EntranceTrigger : UITrigger
     private IEnumerator WalkInBuilding()
     {
         mLoader.CurBuiding.GetComponent<BuildingControl>().SetPlayer();
-        GameObject player = GameDirector.Instance.mPlayer;
+        GameObject player = GameDirector.Instance.Player;
         float targetZ = player.transform.localPosition.z + 0.5f;
         while (player.transform.localPosition.z <= targetZ)
         {
@@ -87,7 +100,7 @@ public class EntranceTrigger : UITrigger
         TweenRotation tRot = player.GetComponent<TweenRotation>();
         tRot.enabled = true;
         tRot.from = player.transform.localEulerAngles;
-        tRot.to = new Vector3(player.transform.localEulerAngles.x, player.transform.localEulerAngles.y + 90, player.transform.localEulerAngles.z);
+        tRot.to = new Vector3(player.transform.localEulerAngles.x, mOriDeg, player.transform.localEulerAngles.z);
         tRot.duration = 0.3f;
         tRot.ResetToBeginning();
 

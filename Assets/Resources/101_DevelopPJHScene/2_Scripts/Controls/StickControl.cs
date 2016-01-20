@@ -146,7 +146,7 @@ public class StickControl : MonoBehaviour
             else
             {
                 transform.localPosition = Vector3.Normalize(changedPos) * mBackgroundRadius;
-                Debug.Log("position " + transform.position);
+                //Debug.Log("position " + transform.position);
             }
         }
     }

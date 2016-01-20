@@ -9,8 +9,7 @@ public enum InteractionType
     Stair,
     Exit,
     Enemy,
-    Gun,
-    Knife
+    Item
 }
 
 /*
