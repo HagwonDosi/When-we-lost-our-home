@@ -27,8 +27,9 @@ public class MapLoader : MonoBehaviour
     public string mFileName = "";
     public List<PrefabInfo> mPrefabList;
     public Transform mBuildingPos = null;
+    public bool mLoadExternMap = false;
 
-    private string mVersion = "1.1";
+    private string mVersion = "1.2.0";
     private Dictionary<string, GameObject> mBuildingInfo = new Dictionary<string, GameObject>();
     private GameObject mCurBuilding = null;
     #endregion
@@ -48,7 +49,9 @@ public class MapLoader : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        //LoadExternMap();
+        if(mLoadExternMap)
+            LoadExternMap();
+
         foreach(var iter in mPrefabList)
         {
             mBuildingInfo.Add(iter.mPrefabName, iter.mObject);
@@ -83,7 +86,7 @@ public class MapLoader : MonoBehaviour
         GameObject wall = Instantiate(mWallTemp) as GameObject;
         wall.transform.parent = mBuilding.transform;
 
-        wall.transform.localPosition = new Vector3(mOffset.x * mMagnification, GetYByFloor(fFloor), mOffset.z);
+        wall.transform.localPosition = new Vector3(mOffset.x * mMagnification, GetYByFloor(fFloor + 1), mOffset.z);
     }
 
     private void MakeStair (int fFloor, float fXPos)
@@ -97,6 +100,36 @@ public class MapLoader : MonoBehaviour
     private void MakePlayerPos (float fXPos)
     {
         mPlayerPos.localPosition = new Vector3(fXPos * mMagnification, GetYByFloor(1), mOffset.z);
+    }
+
+    private void MakeModel(string fName, int fFloor, float xPos)
+    {
+        string path = "Models/" + fName;
+
+        GameObject model = null;
+
+        try
+        {
+            model = Resources.Load(path) as GameObject;
+            Debug.Log("path " + path);
+        }
+        catch
+        {
+            Debug.LogWarning(gameObject.name + ".MapEditor.LoadBGModel() " + "could not find the resource " + fName);
+            return;
+        }
+
+        if (model == null)
+        {
+            Debug.LogWarning(gameObject.name + ".MapEditor.LoadBGModel() " + "could not find the resource " + fName);
+            return;
+        }
+
+        GameObject modelCopy = Instantiate(model) as GameObject;
+        modelCopy.transform.parent = mBuilding.transform;
+
+        modelCopy.transform.localScale = new Vector3(2.5f, 2.5f,2.5f);
+        modelCopy.transform.localPosition = new Vector3(xPos, GetYByFloor(fFloor + 1), mOffset.z + 1f);
     }
 
     public void LoadExternMap()
@@ -127,7 +160,6 @@ public class MapLoader : MonoBehaviour
         {
             float left = (float)(System.Convert.ToDouble(reader.ReadLine()));
             float right = (float)(System.Convert.ToDouble(reader.ReadLine()));
-            int item = System.Convert.ToInt32(reader.ReadLine());
 
             MakeFloor(i + 1, left, right);
         }
@@ -157,6 +189,17 @@ public class MapLoader : MonoBehaviour
             float xPos = (float)System.Convert.ToDouble(reader.ReadLine());
 
             MakePlayerPos(xPos);
+        }
+
+        int modelNum = System.Convert.ToInt32(reader.ReadLine());
+
+        for(int i = 0; i < modelNum; i++)
+        {
+            string name = reader.ReadLine();
+            int arrFloor = System.Convert.ToInt32(reader.ReadLine());
+            float xPos = (float)System.Convert.ToDouble(reader.ReadLine());
+
+            MakeModel(name, arrFloor, xPos);
         }
     }
 

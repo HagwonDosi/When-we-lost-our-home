@@ -29,7 +29,7 @@ public class EntranceTrigger : UITrigger
 
         mLoader.LoadPrefabMap(ent.mEntranceTo);
         mPCon.mCheckAni = false;
-        mAnimator.SetFloat("Speed", 1f);
+        mAnimator.SetBool("Player_Run", true);
         StartCoroutine(WalkBackOutSide());
     }
 
@@ -93,7 +93,7 @@ public class EntranceTrigger : UITrigger
 
         yield return new WaitForSeconds(0.3f);
 
-        mAnimator.SetFloat("Speed", 0f);
+        mAnimator.SetBool("Player_Run", false);
         mPCon.mCheckAni = true;
         StopAllCoroutines();
     }

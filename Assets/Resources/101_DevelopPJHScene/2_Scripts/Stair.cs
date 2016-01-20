@@ -12,6 +12,8 @@ public class Stair : MonoBehaviour
 
     private float mOriginalZ = 0f;
     private float mHeight = 0f;
+    private bool mPlayer = false;
+    private PlayerControl mPCon = null;
     #endregion
 
     #region VirtualFunctions
@@ -41,6 +43,13 @@ public class Stair : MonoBehaviour
         CapsuleCollider collider = fObj.GetComponent<CapsuleCollider>();
 
         mHeight = (collider.height) * fObj.transform.localScale.y;
+
+        if(fObj.tag.Equals("Player"))
+        {
+            mPCon = fObj.GetComponent<PlayerControl>();
+
+
+        }
 
 
         mOriginalZ = fObj.transform.localPosition.z;
