@@ -36,12 +36,14 @@ public class NPC_Move : MonoBehaviour // NPC의 움직임
         {
             if (time.getTimeGap(SDay, STime) >= 1.0f)
             {
+                
                 SDay = time.Day;
                 STime = time.Hour;
 
             }
             pos_x = transform.localPosition.x;
-
+            Debug.Log("Sday : " + SDay);
+            Debug.Log("Rand_go : " + Rand_go);
             if (Rand_go <= SDay && Chek == false)
             {
                 ani.SetBool("NPC_Walk", true);
