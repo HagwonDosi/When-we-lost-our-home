@@ -21,7 +21,7 @@ public class QuitTrigger : UITrigger
         mTRot = mPlayer.GetComponent<TweenRotation>();
         mPCon.mCheckAni = false;
 
-        mAnimatr.SetFloat("Speed", 1f);
+        mAnimatr.SetBool("Player_Run", true);
         mTRot.enabled = true;
         mTRot.from = mPlayer.transform.localEulerAngles;
         mTRot.to = new Vector3(mPlayer.transform.localEulerAngles.x, 180, mPlayer.transform.localEulerAngles.z);
