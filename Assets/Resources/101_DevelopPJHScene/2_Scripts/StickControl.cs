@@ -3,23 +3,29 @@ using System.Collections;
 
 public class StickControl : MonoBehaviour
 {
-    public Camera mainCamera = null;
-    public GameObject Parent = null;
-    public UISprite StickSprite = null;
-    public UISprite Background = null;
-    public float backgroundRadius = 0;
-    public float speedRate = 1.0f;
+    #region Variables
+    public Camera mMainCamera = null;
+    public GameObject mParent = null;
+    public UISprite mStickSprite = null;
+    public UISprite mBackground = null;
+    public float mBackgroundRadius = 0;
+    public float mSpeedRate = 1.0f;
     public bool mFreePositionTransparent = false;
 
-    private bool isTouched = false;
-    private Vector3 touchVector;
-    private Vector3 originalLocal;
+    private bool mTouched = false;
+    private Vector3 mTouchVector;
+    private Matrix4x4 mOriMat;
+    /// <summary>
+    /// 원래 터치할 때 찍은 지점
+    /// </summary>
+    private Vector3 mOriginalLocal;
+    #endregion
 
     public Vector3 StickVector
     {
         get
         {
-            return transform.localPosition * speedRate;
+            return transform.localPosition * mSpeedRate;
         }
     }
 
@@ -28,53 +34,55 @@ public class StickControl : MonoBehaviour
     {
         if(mFreePositionTransparent)
         {
-            StickSprite.alpha = 0;
-            Background.alpha = 0;
+            mStickSprite.alpha = 0;
+            mBackground.alpha = 0;
         }
 
         Matrix4x4 mat = transform.worldToLocalMatrix;
-        originalLocal = mat * transform.position;
+        mOriginalLocal = mat * transform.position;
 	}
-	
-    public void isTrigger()
+
+    #region CustomFunctions
+    /*public void isTrigger()
     {
         Debug.Log("touched");
 
         Vector3 mouseVector = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
         touchVector = transform.position - mouseVector;
-    }
+    }*/
 
     public void onSceneTouched(Vector3 MousePos)
     {
         Debug.Log("scene touched");
         //isTouched를 true 대입
-        isTouched = true;
+        mTouched = true;
 
         //만약에 자유롭게 움직이는 걸로 했으면 그 위치에 생성
         if(mFreePositionTransparent)
         {
-            Parent.transform.position = MousePos;
-            StickSprite.alpha = 1;
-            Background.alpha = 1;
+            mParent.transform.position = MousePos;
+            mStickSprite.alpha = 1;
+            mBackground.alpha = 1;
         }
 
         //월드 좌표를 로컬 좌표로 바꿈 그리고 originalLocal에 저장
-        Matrix4x4 mat = transform.worldToLocalMatrix;
-        originalLocal = mat * MousePos;
+        mOriMat = transform.worldToLocalMatrix;
+        mOriginalLocal = transform.localPosition;
+        Debug.Log("originalLocal " + mOriginalLocal);
     }
 
     public void onSceneReleased()
     {
         //Debug.Log("stick released");
 
-        isTouched = false;
+        mTouched = false;
         this.transform.localPosition = Vector3.zero;
 
         if(mFreePositionTransparent)
         {
-            StickSprite.alpha = 0;
-            Background.alpha = 0;
+            mStickSprite.alpha = 0;
+            mBackground.alpha = 0;
         }
     }
 
@@ -85,18 +93,12 @@ public class StickControl : MonoBehaviour
         onSceneReleased();
     }
 
-	// Update is called once per frame
-	void Update ()
-    {
-        
-	}
-
     void LateUpdate()
     {
         if (Input.GetMouseButtonDown(0))
         {
             //마우스 클릭
-            Vector3 mouse = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mouse = mMainCamera.ScreenToWorldPoint(Input.mousePosition);
 
             //화면 반쪽 반이면 onSceneTouched 호출
             if(mouse.x <= 0.0f)
@@ -108,39 +110,45 @@ public class StickControl : MonoBehaviour
         }
 
         //isTouched가 true라면
-        if (isTouched)
+        if (mTouched)
         {
             //변수 선언
             bool isChecked = false;
-            Vector3 changedPos = touchVector + mainCamera.ScreenToWorldPoint(Input.mousePosition);  // 바뀐 좌표
             Matrix4x4 mat = transform.worldToLocalMatrix;
+            ///현재 마우스 좌표
+            Vector3 changedPos =  mOriMat.MultiplyPoint(mMainCamera.ScreenToWorldPoint(Input.mousePosition));
             Vector3 local = mat * changedPos;
-            //Debug.Log(local);
-            //원래 마우스 터치한 지접에서 얼마나 멀어졌는가
-            float x = originalLocal.x - local.x;
-            float y = originalLocal.y - local.y;
-            if (!mFreePositionTransparent)
+            //Debug.Log("changedPos " + changedPos);
+            //원래 마우스 터치한 지점에서 얼마나 멀어졌는가
+            float x = changedPos.x;
+            float y = changedPos.y;
+            if (mFreePositionTransparent)
             {
-                x = Background.transform.localPosition.x - local.x;
-                y = Background.transform.localPosition.y - local.y;
+                x = mBackground.transform.localPosition.x - local.x;
+                y = mBackground.transform.localPosition.y - local.y;
             }
 
-            float dis = Mathf.Sqrt((x * x) + (y * y));
+            float dis = Vector3.Distance(mOriginalLocal, changedPos);
             //Debug.Log("local " + local);
 
             //Debug.Log("dis " + dis);
+            //Debug.Log("backgroundRad" + mBackgroundRadius);
 
-            if (dis > backgroundRadius)
+            if (dis > mBackgroundRadius)
             {
                 isChecked = true;
             }
 
             if (!isChecked)
-                transform.position = changedPos;
+            {
+                transform.localPosition = changedPos;
+            }
             else
             {
-                transform.localPosition = Vector3.Normalize(local - transform.parent.localPosition) * backgroundRadius;
+                transform.localPosition = Vector3.Normalize(changedPos) * mBackgroundRadius;
+                Debug.Log("position " + transform.position);
             }
         }
     }
+    #endregion
 }

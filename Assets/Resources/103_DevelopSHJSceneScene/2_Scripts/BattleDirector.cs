@@ -111,7 +111,6 @@ public class BattleDirector : MonoBehaviour
     /// <returns>죽었으면 true, 살았으면 false</returns>
     private bool CheckDeath(Fightable fOppo)
     {
-        Debug.Log("oppo " + fOppo);
         if(fOppo.mStatus.GetStatus("Health") == 0)
         {
             return true;

@@ -89,9 +89,14 @@ public class PlayerControl : MonoBehaviour
                 
                 if(mCheckAni)
                 {
-                    mAnimator.SetFloat("Speed", (float)CustomMath.CustomRound(4, Mathf.Abs(mRB.velocity.x)));
+                    mAnimator.SetBool("Player_Run", true);
                 }
                 
+            }
+
+            if(mCheckAni && Mathf.Round(mRB.velocity.x) == 0)
+            {
+                mAnimator.SetBool("Player_Run", false);
             }
             yield return null;
         }
