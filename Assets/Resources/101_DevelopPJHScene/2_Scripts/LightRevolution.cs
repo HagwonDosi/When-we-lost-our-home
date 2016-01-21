@@ -53,17 +53,18 @@ public class LightRevolution : MonoBehaviour
             }
             if(initialized && (int)mTimer.Hour >= 6f && (int)mTimer.Hour <= 18f)
             {
-                if(mTimer.Hour - befHour >= 0.032f)
+                float dif = mTimer.Hour - befHour;
+
+                if(dif >= 0.032f)
                 {
-                    Debug.Log("TimeDif " + (mTimer.Hour - befHour));
-                    i++;
-                    Debug.Log(i);
+                    //Debug.Log("TimeDif " + (mTimer.Hour - befHour));
                     befHour = mTimer.Hour;
-                    ChangeOneTime();
+                    ChangeOneTime(dif / 0.032f);
                 }
             }
             if((int)mTimer.Hour > 18f)
             {
+                mLight.enabled = false;
                 initialized = false;
             }
             
@@ -75,29 +76,30 @@ public class LightRevolution : MonoBehaviour
     /// <summary>
     /// 한 번 변화(게임내 2분)
     /// </summary>
-    private void ChangeOneTime()
+    private void ChangeOneTime(float rate)
     {
         Vector3 eul = mLight.transform.localEulerAngles;
 
         eul.x = 20.5f;
-        eul.y += 0.5f;
+        eul.y += 0.5f * rate;
 
         mLight.transform.localEulerAngles = eul;
 
         Color curCol = mLight.color;
 
-        
-        if(mTimer.Hour <= 12f)
+        float val = 0.0008f * rate;
+
+        if (mTimer.Hour <= 12f)
         {
-            curCol.r += 0.0008f;
-            curCol.b += 0.0008f;
-            curCol.g += 0.0008f;
+            curCol.r += val;
+            curCol.b += val;
+            curCol.g += val;
         }
         else
         {
-            curCol.r -= 0.0008f;
-            curCol.b -= 0.0008f;
-            curCol.g -= 0.0008f;
+            curCol.r -= val;
+            curCol.b -= val;
+            curCol.g -= val;
         }
 
         mLight.color = curCol;
@@ -108,8 +110,7 @@ public class LightRevolution : MonoBehaviour
     /// </summary>
     private void MorningCame()
     {
-        Debug.Log("oriColor " + mLight.color);
-        Debug.Log("baseScolor " + mBaseColor);
+        mLight.enabled = true;
         mLight.color = mBaseColor;
 
         mLight.transform.localEulerAngles = new Vector3(20.5f, -90f);

@@ -17,6 +17,7 @@ public class InteractionTrigger : MonoBehaviour
 
     private UISprite mSprite = null;
     private UITrigger mTrigger = null;
+    private Collider mCollider = null;
     private Dictionary<InteractionType, InteractionTriggerInfo> mTriggerInfoDic = new Dictionary<InteractionType, InteractionTriggerInfo>();
     #endregion
 
@@ -24,8 +25,8 @@ public class InteractionTrigger : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
+        mCollider = GetComponent<Collider>();
         mSprite = GetComponent<UISprite>();
-
         mSprite.alpha = 0;
 
 	    foreach(var iter in mTriggerInfo)
@@ -46,18 +47,21 @@ public class InteractionTrigger : MonoBehaviour
 
     public void InteractionTriggerEnter(InteractionControl fCon)
     {
+        mCollider.enabled = true;
         InteractionTriggerInfo getInfo;
 
         mTriggerInfoDic.TryGetValue(fCon.mType, out getInfo);
 
         mSprite.spriteName = getInfo.mSpriteName;
         mSprite.alpha = 1;
+        mSprite.MakePixelPerfect();
 
         mTrigger = getInfo.mTrigger;
     }
 
     public void InteractionTriggerExit()
     {
+        mCollider.enabled = false;
         mSprite.alpha = 0;
         mTrigger = null;
     }
