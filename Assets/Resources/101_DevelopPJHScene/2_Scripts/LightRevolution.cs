@@ -41,6 +41,7 @@ public class LightRevolution : MonoBehaviour
         float befHour = mTimer.Hour;
         //오늘 초기화 했는지
         bool initialized = false;
+        int i = 0;
 
         while(true)
         {
@@ -52,10 +53,12 @@ public class LightRevolution : MonoBehaviour
             }
             if(initialized && (int)mTimer.Hour >= 6f && (int)mTimer.Hour <= 18f)
             {
-                if(mTimer.Hour - befHour >= 0.016f)
+                if(mTimer.Hour - befHour >= 0.032f)
                 {
+                    Debug.Log("TimeDif " + (mTimer.Hour - befHour));
+                    i++;
+                    Debug.Log(i);
                     befHour = mTimer.Hour;
-
                     ChangeOneTime();
                 }
             }
@@ -70,22 +73,32 @@ public class LightRevolution : MonoBehaviour
     }
 
     /// <summary>
-    /// 한 번 변화(게임내 1분)
+    /// 한 번 변화(게임내 2분)
     /// </summary>
     private void ChangeOneTime()
     {
         Vector3 eul = mLight.transform.localEulerAngles;
 
         eul.x = 20.5f;
-        eul.y += 0.25f;
+        eul.y += 0.5f;
 
         mLight.transform.localEulerAngles = eul;
 
         Color curCol = mLight.color;
 
-        curCol.r -= 0.1f;
-        curCol.b -= 0.1f;
-        curCol.g -= 0.1f;
+        
+        if(mTimer.Hour <= 12f)
+        {
+            curCol.r += 0.0008f;
+            curCol.b += 0.0008f;
+            curCol.g += 0.0008f;
+        }
+        else
+        {
+            curCol.r -= 0.0008f;
+            curCol.b -= 0.0008f;
+            curCol.g -= 0.0008f;
+        }
 
         mLight.color = curCol;
     }

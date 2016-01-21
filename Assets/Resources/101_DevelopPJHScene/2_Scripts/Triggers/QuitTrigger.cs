@@ -28,11 +28,11 @@ public class QuitTrigger : UITrigger
         float target = 180f;
         mOriDeg = 90f;
 
-        if(Mathf.Abs(mPlayer.transform.localEulerAngles.y) == -90f)
+        if(Mathf.Abs(mPlayer.transform.localEulerAngles.y) == 270f)
         {
-            mOriDeg = -90f;
-            target = -180f;
+            mOriDeg = 270f;
         }
+        
 
         mTRot.to = new Vector3(mPlayer.transform.localEulerAngles.x, target, mPlayer.transform.localEulerAngles.z);
         mTRot.duration = 0.3f;
