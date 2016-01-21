@@ -28,5 +28,4 @@ public class CustomMath
 
         return (double)nPart * pow10;
     }
-
 }

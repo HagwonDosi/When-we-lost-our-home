@@ -14,6 +14,8 @@ public class ItemControl : MonoBehaviour
     /// 계속해서 얻을 수 있는가
     /// </summary>
     private bool mInfinite = false;
+    [SerializeField]
+    private GameObject mInteractionCon = null;
     #endregion
 
     #region Capsules
@@ -30,6 +32,14 @@ public class ItemControl : MonoBehaviour
         get
         {
             return mInfinite;
+        }
+    }
+
+    public GameObject Interaction
+    {
+        get
+        {
+            return mInteractionCon;
         }
     }
     #endregion

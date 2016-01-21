@@ -9,7 +9,7 @@ public class QuitTrigger : UITrigger
     public SmooothCamera mCamera = null;
 
     private float mSpeed = 0.01f;
-    private float mDegDif = 0f;
+    private float mOriDeg = 0f;
     private BuildingControl mBuilCon = null;
     private TweenRotation mTRot = null;
     private GameObject mPlayer = null;
@@ -24,11 +24,20 @@ public class QuitTrigger : UITrigger
         mAnimatr.SetBool("Player_Run", true);
         mTRot.enabled = true;
         mTRot.from = mPlayer.transform.localEulerAngles;
-        mTRot.to = new Vector3(mPlayer.transform.localEulerAngles.x, 180, mPlayer.transform.localEulerAngles.z);
+
+        float target = 180f;
+        mOriDeg = 90f;
+
+        if(Mathf.Abs(mPlayer.transform.localEulerAngles.y) == 270f)
+        {
+            mOriDeg = 270f;
+        }
+        
+
+        mTRot.to = new Vector3(mPlayer.transform.localEulerAngles.x, target, mPlayer.transform.localEulerAngles.z);
         mTRot.duration = 0.3f;
         mTRot.ResetToBeginning();
-
-        mDegDif = 180f - mPlayer.transform.localEulerAngles.y;
+        
         StartCoroutine(WalkFront1());
     }
 
@@ -66,7 +75,7 @@ public class QuitTrigger : UITrigger
 
         mTRot.enabled = true;
         mTRot.from = mPlayer.transform.localEulerAngles;
-        mTRot.to = new Vector3(mPlayer.transform.localEulerAngles.x, 180f - mDegDif, mPlayer.transform.localEulerAngles.z);
+        mTRot.to = new Vector3(mPlayer.transform.localEulerAngles.x, mOriDeg, mPlayer.transform.localEulerAngles.z);
         mTRot.duration = 0.3f;
         mTRot.ResetToBeginning();
 
