@@ -26,7 +26,7 @@ public class SmooothCamera : MonoBehaviour
     #region CustomFunction
     public void GoImmediately()
     {
-        transform.position = mOffset + new Vector3(mObject.transform.position.x, mObject.transform.position.y, mObject.transform.position.z - 2.7f);
+        transform.position = mOffset + new Vector3(mObject.transform.position.x, mObject.transform.position.y, mObject.transform.position.z - 1.1f);
     }
 
     private void MoveCamera()

@@ -5,7 +5,7 @@ public class QuitTrigger : UITrigger
 {
     public PlayerControl mPCon = null;
     public Animator mAnimatr = null;
-    public MapLoader mLoader = null;
+    public BuildingLoader mLoader = null;
     public SmooothCamera mCamera = null;
 
     private float mSpeed = 0.01f;
