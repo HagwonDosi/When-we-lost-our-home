@@ -12,14 +12,17 @@ public struct InteractionTriggerInfo
 
 public class InteractionTrigger : MonoBehaviour
 {
+    #region Variables
     public List<InteractionTriggerInfo> mTriggerInfo;
 
     private UISprite mSprite = null;
     private UITrigger mTrigger = null;
     private Dictionary<InteractionType, InteractionTriggerInfo> mTriggerInfoDic = new Dictionary<InteractionType, InteractionTriggerInfo>();
+    #endregion
 
-	// Use this for initialization
-	void Start ()
+    #region VirtualFunctions
+    // Use this for initialization
+    void Start ()
     {
         mSprite = GetComponent<UISprite>();
 
@@ -30,7 +33,9 @@ public class InteractionTrigger : MonoBehaviour
             mTriggerInfoDic.Add(iter.mType, iter);
         }
 	}
+    #endregion
 
+    #region CustomFunctions
     public void OnRelease()
     {
         if (mTrigger != null)
@@ -56,4 +61,10 @@ public class InteractionTrigger : MonoBehaviour
         mSprite.alpha = 0;
         mTrigger = null;
     }
+
+    public void SwitchInteractionSprite(string spriteName)
+    {
+        mSprite.spriteName = spriteName;
+    }
+    #endregion
 }

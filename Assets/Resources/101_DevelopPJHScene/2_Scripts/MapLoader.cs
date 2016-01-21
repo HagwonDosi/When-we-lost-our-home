@@ -31,6 +31,7 @@ public class MapLoader : MonoBehaviour
 
     private string mVersion = "1.2.0";
     private Dictionary<string, GameObject> mBuildingInfo = new Dictionary<string, GameObject>();
+    [SerializeField]
     private GameObject mCurBuilding = null;
     #endregion
 
