@@ -8,6 +8,8 @@ public class ItemTrigger : UITrigger
 {
     private CollisionTrigger mCTrigger = null;
     private InvenData mPlayerInven = null;
+    [SerializeField]
+    private InteractionTrigger mITrigger = null;
 
     void Start()
     {
@@ -20,9 +22,11 @@ public class ItemTrigger : UITrigger
         ItemControl iCon = mCTrigger.ColliderObject.GetComponent<ItemControl>();
 
         mPlayerInven.AddItem(iCon.ItemInfo);
+        mITrigger.InteractionTriggerExit();
 
         if(!iCon.IsInfinite)
         {
+            Destroy(iCon.Interaction);
             Destroy(iCon.gameObject);
         }
     }
