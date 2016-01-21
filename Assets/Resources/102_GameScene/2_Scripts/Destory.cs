@@ -17,6 +17,7 @@ public class Destory : MonoBehaviour {
 
     public void Destoryed()
     {
+        UIDirector.Instance.SetEnabledUILayer(0, true);
         Destory_Object.transform.localPosition = new Vector3(10000, 10000, 10000);
     }
 }
