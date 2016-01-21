@@ -7,7 +7,7 @@ public class Playe_Animation : MonoBehaviour {
     public bool Target = false;
     public Player_Gun player_Chek = null;
 
-    public Enemy_State enemy;
+    public EnemyStatus enemy;
 
     public float FireTime = 0.3f;
     private float ChekingTime = 0.0f;
@@ -23,11 +23,11 @@ public class Playe_Animation : MonoBehaviour {
         {
             player.SetBool("Player_Monster", true);
         }
-        if (enemy.player_Text_Chek == true)
-        {
-            Target = false; 
-            player.SetBool("Player_Monster", false);
-        }
+        //if (enemy.player_Text_Chek == true)
+        //{
+        //    Target = false; 
+        //    player.SetBool("Player_Monster", false);
+        //}
 	
         /*if(transform.Find("mon@stand").GetComponent<Enemy_State>().player_status == true)
         {

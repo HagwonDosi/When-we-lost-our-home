@@ -38,5 +38,8 @@ public class Player_Animation_Take_Gun : MonoBehaviour
 
     }
 
-
+    void EndAttack()
+    {
+        Player.SetBool("Player_Attack", false);
+    }
 }

@@ -32,8 +32,8 @@ public class InvenData : MonoBehaviour
     {
         if (BagLevel * 6 <= Count_Item)
         {
-            return;
             Debug.Log("Up");
+            return;
         }
         Debug.Log(item);
         Count_Item += 1;
