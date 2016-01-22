@@ -52,6 +52,7 @@ public class QuitTrigger : UITrigger
 
     private IEnumerator WalkFront2()
     {
+        mCamera.OutBuilding();
         mBuilCon.PlayerExit();
 
         float targetZ = mPlayer.transform.localPosition.z - 0.5f;

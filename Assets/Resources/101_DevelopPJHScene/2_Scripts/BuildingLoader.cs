@@ -31,19 +31,30 @@ public class ExternBuildingConEnt
 
 public class BuildingLoader : MonoBehaviour
 {
-    public List<PrefabInfo> mPrefabList;
-
+    #region Variables
     private Dictionary<string, ExternBuildingConEnt> mBuildingConInfo = new Dictionary<string, ExternBuildingConEnt>();
     private Dictionary<string, GameObject> mBuildingPreInfo = new Dictionary<string, GameObject>();
     [SerializeField]
     private GameObject mCurBuilding = null;
+    [SerializeField]
+    private ExternBuildingControl mCurExternBuilding = null;
+    [SerializeField]
+    private GameObject mExit = null;
+    #endregion
 
-    #region get/setter
+    #region Capsule
     public GameObject CurBuiding
     {
         get
         {
             return mCurBuilding;
+        }
+    }
+    public ExternBuildingControl CurExternBuildingControl
+    {
+        get
+        {
+            return mCurExternBuilding;
         }
     }
 
@@ -74,14 +85,14 @@ public class BuildingLoader : MonoBehaviour
             exBConDic.TryGetValue(iter.Key, out con);
 
             mBuildingConInfo.Add(iter.Key, new ExternBuildingConEnt(con, iter.Value));
-        }
 
-        foreach (var iter in mPrefabList)
-        {
-            mBuildingPreInfo.Add(iter.mPrefabName, iter.mObject);
+            var prefab = Resources.Load("101_DevelopPJHScene/1_Prefabs/MapPrefabs/" + iter.Key) as GameObject;
+
+            mBuildingPreInfo.Add(iter.Key, prefab);
         }
     }
 
+    #region CustomFunctions
     public void LoadPrefabMap(string fMapName)
     {
         GameObject prefab = null;
@@ -94,6 +105,7 @@ public class BuildingLoader : MonoBehaviour
                 GameObject building = Instantiate(prefab, conEnt.ExtCon.mBuildingSpawnPlace.position, Quaternion.Euler(0, 0, 0)) as GameObject;
 
                 building.GetComponent<BuildingControl>().mBuildingName = fMapName;
+                mCurExternBuilding = conEnt.ExtCon;
                 mCurBuilding = building;
                 //mCurBuilding.GetComponent<BuildingControl>().SetPlayer();
             }
@@ -106,7 +118,19 @@ public class BuildingLoader : MonoBehaviour
         {
             Debug.LogWarning(gameObject.name + ".BuildingLoader.LoadPrefabMap() " + "Map doesn't exist");
         }
-
-
     }
+
+    /// <summary>
+    /// 현재 빌딩의 들어간 부분에 출구를 만드는 함수
+    /// </summary>
+    /// <param name="fEnt">들어온 입구</param>
+    public void AddExitInCurBuiding(Entrance fEnt)
+    {
+        GameObject exit = Instantiate(mExit) as GameObject;
+        exit.transform.parent = mCurBuilding.transform;
+
+        mCurBuilding.GetComponent<BuildingControl>().mExit = exit.transform;
+        exit.transform.position = new Vector3(fEnt.transform.position.x, fEnt.transform.position.y, mCurBuilding.transform.position.z);
+    }
+    #endregion
 }

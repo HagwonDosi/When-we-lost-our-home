@@ -28,6 +28,7 @@ public class EntranceTrigger : UITrigger
         }
 
         mLoader.LoadPrefabMap(ent.mEntranceTo);
+        mLoader.AddExitInCurBuiding(ent);
         mPCon.mCheckAni = false;
         mAnimator.SetBool("Player_Run", true);
         StartCoroutine(WalkBackOutSide());
@@ -63,19 +64,29 @@ public class EntranceTrigger : UITrigger
         
         
         yield return new WaitForSeconds(0.3f);
-
-        Debug.Log(mAnimator.GetBool("Player_Run"));
-        float targetZ = player.transform.localPosition.z + 0.5f;
-        while(player.transform.localPosition.z <= targetZ)
+        
+        while(true)
         {
-            Vector3 local = player.transform.localPosition;
+            Vector3 local = player.transform.position;
             local.z += Time.deltaTime * 62.5f * mSpeed;
-            player.transform.localPosition = local;
+            player.transform.position = local;
 
             yield return new WaitForFixedUpdate();
         }
+    }
 
+    public void DoorOpening()
+    {
         StopAllCoroutines();
+        mAnimator.SetBool("Player_Run", false);
+    }
+
+    /// <summary>
+    /// 문이 열리고 다시 걷기 시작한다.
+    /// </summary>
+    public void StartWalkingAgain()
+    {
+        mAnimator.SetBool("Player_Run", true);
         StartCoroutine(WalkInBuilding());
     }
 
@@ -85,14 +96,14 @@ public class EntranceTrigger : UITrigger
     /// <returns></returns>
     private IEnumerator WalkInBuilding()
     {
-        mLoader.CurBuiding.GetComponent<BuildingControl>().SetPlayer();
+        mCamera.InBuilding();
         GameObject player = GameDirector.Instance.Player;
-        float targetZ = player.transform.localPosition.z + 0.5f;
-        while (player.transform.localPosition.z <= targetZ)
+        float targetZ = mLoader.CurBuiding.GetComponent<BuildingControl>().mExit.transform.position.z;
+        while (player.transform.position.z <= targetZ)
         {
-            Vector3 local = player.transform.localPosition;
+            Vector3 local = player.transform.position;
             local.z += Time.deltaTime * 62.5f * mSpeed;
-            player.transform.localPosition = local;
+            player.transform.position = local;
 
             yield return null;
         }
@@ -107,6 +118,7 @@ public class EntranceTrigger : UITrigger
         yield return new WaitForSeconds(0.3f);
 
         mAnimator.SetBool("Player_Run", false);
+        mLoader.CurExternBuildingControl.Animator.SetBool("Opened", false);
         mPCon.mCheckAni = true;
         StopAllCoroutines();
     }

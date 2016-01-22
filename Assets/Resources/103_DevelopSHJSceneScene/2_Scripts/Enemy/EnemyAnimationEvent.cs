@@ -20,4 +20,9 @@ public class EnemyAnimationEvent : MonoBehaviour
     {
         mAnimator.SetBool("Monster_Attack_chek", false);
     }
+
+    void MonsterDead()
+    {
+        Destroy(gameObject);
+    }
 }
