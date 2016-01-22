@@ -29,7 +29,13 @@ public class MapLoader : MonoBehaviour
     public bool mLoadExternMap = false;
 
     private string mVersion = "1.2.0";
+<<<<<<< HEAD
     [SerializeField]
+=======
+    private Dictionary<string, GameObject> mBuildingInfo = new Dictionary<string, GameObject>();
+    [SerializeField]
+    private GameObject mCurBuilding = null;
+>>>>>>> develop
     #endregion
 
 
