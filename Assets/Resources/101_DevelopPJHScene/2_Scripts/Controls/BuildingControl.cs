@@ -10,7 +10,7 @@ using System.Collections.Generic;
 public class BuildingControl : MonoBehaviour
 {
     #region Variables
-    public Transform mPlayerPos = null;
+    public Transform mExit = null;
     public string mBuildingName = "";
 
     private GameObject mEntrance = null;
@@ -73,11 +73,6 @@ public class BuildingControl : MonoBehaviour
     {
         mMaxFloor += 1;
         mFloors.Add(floor);
-    }
-
-    public void SetPlayer()
-    {
-        GameDirector.Instance.Player.transform.position = mPlayerPos.transform.position;
     }
 
     public void PlayerExit()
