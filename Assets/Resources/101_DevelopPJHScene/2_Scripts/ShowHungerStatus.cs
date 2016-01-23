@@ -12,6 +12,8 @@ public class ShowHungerStatus : ShowPlayerStatus
 	new void Start ()
     {
         StartCoroutine(UpdateCurVal());
+
+        base.Start();
 	}
 
     IEnumerator UpdateCurVal()

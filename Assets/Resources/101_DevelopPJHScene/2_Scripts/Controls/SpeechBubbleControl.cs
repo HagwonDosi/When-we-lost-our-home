@@ -7,6 +7,7 @@ using System.Collections;
 */
 public class SpeechBubbleControl : MonoBehaviour
 {
+    #region Variables
     public ShowTextSlowly mText = null;
     public GameObject mSubject = null;
     public Camera mCamera = null;
@@ -16,6 +17,9 @@ public class SpeechBubbleControl : MonoBehaviour
     private TweenScale mScale = null;
     private UIWidget mWidget = null;
     private bool isTalking = false;
+    [SerializeField]
+    private Vector2 mOffset = Vector2.zero;
+    #endregion
 
     #region VirtualFunctions
     // Use this for initialization
@@ -109,11 +113,13 @@ public class SpeechBubbleControl : MonoBehaviour
     void SetBackgroundSprite(string fStr)
     {
         Vector2 size = mText.getFullSize(fStr);
-        mWidget.width = (int)(size.x) + 100;
-        mWidget.height = (int)(size.y) + 50;
+        mWidget.width = (int)(size.x) + 150;
+        mWidget.height = (int)(size.y) + 100;
 
         Vector2 oriPos = mBackgroundSpr.transform.localPosition;
-        Vector2 LOriPos = mText.mLabel.transform.localPosition;
+        float x = mWidget.transform.localPosition.x + (150f / 2);
+        float y = mWidget.transform.localPosition.y + (mWidget.height / 2);
+        Vector2 LOriPos = new Vector2(x, y);
         float left = 0;
         float right = 0;
         float width = mWidget.width;
