@@ -24,6 +24,7 @@ public class ShowPlayerStatus : MonoBehaviour
 
     private int mCurInfoIndex = 0;
     private bool mIsInforming = false;
+    private float mBefMin = 100f;
 
 	// Use this for initialization
 	protected void Start ()
@@ -33,25 +34,34 @@ public class ShowPlayerStatus : MonoBehaviour
 
     void DetermineToInform()
     {
-        float maxVal = 100;
+        float maxVal = 0;
+        float minVal = 0;
         int theIdx = 0;
-
-        if (mIsInforming)
-            maxVal = mStatuses[mCurInfoIndex].mValue;
 
         for(int i = 0; i < mStatuses.Count; i++)
         {
-            if (mStatuses[i].mValue < maxVal)
+            if(mStatuses[i].mValue <= mBefMin)
             {
-                maxVal = mStatuses[i].mValue;
-                theIdx = i;
+                if (maxVal < mStatuses[i].mValue)
+                {
+                    maxVal = mStatuses[i].mValue;
+                    theIdx = i;
+                }
+                else if (minVal < mStatuses[i].mValue)
+                {
+                    minVal = mStatuses[i].mValue;
+                }
             }
         }
 
-        if(mCurValue <= maxVal)
+        if (mCurValue < minVal)
+            mBefMin = minVal;
+
+        Debug.Log("max " + maxVal + " min " + minVal + " befMin " + mBefMin);
+        if(mCurValue <= maxVal && mCurValue >= minVal)
         {
             mIsInforming = true;
-            mCurValue = theIdx;
+            mCurInfoIndex = theIdx;
         }
     }
 
