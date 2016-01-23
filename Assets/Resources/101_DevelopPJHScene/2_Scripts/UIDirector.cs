@@ -14,6 +14,7 @@ public class UIDirector : MonoBehaviour
     public List<ColliderListClass> mUILayers = new List<ColliderListClass>();
 
     private static UIDirector mInstance = null;
+    private UIAnchor[] mAnchors = new UIAnchor[9];
     #endregion
 
     #region Capsule
@@ -37,7 +38,25 @@ public class UIDirector : MonoBehaviour
 
     #endregion
 
+    #region VirtualFunctions
+    void Start()
+    {
+        var ancs = FindObjectsOfType<UIAnchor>();
+        for (int i = 0; i < ancs.Length; i++)
+        {
+            mAnchors[(int)ancs[i].side] = ancs[i];
+        }
+    }
+
+    #endregion
+
     #region CustomFunctions
+
+    public GameObject GetUIAnchor(UIAnchor.Side fSide)
+    {
+        return mAnchors[(int)fSide].gameObject;
+    }
+
     /// <summary>
     /// 해당 레벨의 UI의 enabled를 설정
     /// </summary>

@@ -45,14 +45,10 @@ public class GameDirector : MonoBehaviour
     #endregion
 
     #region VirtualFuntions
-    // Use this for initialization
-    void Start ()
-    {
-	
-	}
     #endregion
 
     #region CustomFunctions
+
     public Vector2 getPanelSize()
     {
         Vector2 size = new Vector2();

@@ -38,6 +38,7 @@ public class QuitTrigger : UITrigger
         mTRot.duration = 0.3f;
         mTRot.ResetToBeginning();
         
+        UIDirector.Instance.SetEnabledUILayer(0, false);
         StartCoroutine(WalkFront1());
     }
 
@@ -81,6 +82,8 @@ public class QuitTrigger : UITrigger
         mTRot.ResetToBeginning();
 
         yield return new WaitForSeconds(0.3f);
+
+        UIDirector.Instance.SetEnabledUILayer(0, true);
         StopAllCoroutines();
         mPCon.mCheckAni = true;
         Destroy(mLoader.CurBuiding);

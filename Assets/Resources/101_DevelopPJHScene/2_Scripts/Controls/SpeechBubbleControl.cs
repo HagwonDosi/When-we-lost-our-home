@@ -11,41 +11,81 @@ public class SpeechBubbleControl : MonoBehaviour
     public ShowTextSlowly mText = null;
     public GameObject mSubject = null;
     public Camera mCamera = null;
-    public UISprite mBackgroundSpr = null;
     public float mStdWidth = 256f;
+    public Vector2 mOffset = Vector2.zero;
 
+    [SerializeField]
+    private UISprite mBackgroundSpr = null;
+    private BoxCollider2D mBackgroundCollider = null;
     private TweenScale mScale = null;
     private UIWidget mWidget = null;
     private bool isTalking = false;
-    [SerializeField]
-    private Vector2 mOffset = Vector2.zero;
+    #endregion
+
+    #region Capsules
+    public UISprite BackgroundSprite
+    {
+        get
+        {
+            return mBackgroundSpr;
+        }
+    }
+
     #endregion
 
     #region VirtualFunctions
     // Use this for initialization
     void Start()
     {
+        mBackgroundCollider = mBackgroundSpr.GetComponent<BoxCollider2D>();
         mScale = mBackgroundSpr.GetComponent<TweenScale>();
         mScale.enabled = false;
         mWidget = mBackgroundSpr.GetComponent<UIWidget>();
 
         StartCoroutine(KeepBubblePlace());
-        StartCoroutine(KeepBubblePlace());
+    }
+
+    void OnDestroy()
+    {
+        SpeechBubbleDirector.Instance.RemoveSpeechBubble(this);
     }
     #endregion
 
     #region CustomFunction
+    private void GetMouseInput()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            Vector3 mouseLocal = mBackgroundCollider.transform.worldToLocalMatrix.
+                MultiplyPoint(SmooothCamera.Instance.CameraUI.ScreenToWorldPoint(Input.mousePosition));
+
+            Vector2 center = mBackgroundCollider.center;
+            Vector2 size = mBackgroundCollider.size;
+
+            if(mouseLocal.x >= center.x - (size.x / 2) && mouseLocal.x <= center.x + (size.x / 2)
+                && mouseLocal.y >= center.y - (size.y / 2) && mouseLocal.y <= center.y + (size.y / 2))
+            {
+
+            }
+        }
+    }
+
     IEnumerator KeepBubblePlace()
     {
-        Vector2 OriSubjectPos = mCamera.WorldToScreenPoint(mSubject.transform.position);
-        Vector2 oriPos = transform.localPosition;
+        //SmoothCamera가 Start되지 않은 것 같아서
+        yield return new WaitForSeconds(0.1f);
 
         while (true)
         {
-            Vector2 curSubPos = mCamera.WorldToScreenPoint(mSubject.transform.position);
-            Vector2 subDif = curSubPos - OriSubjectPos;
-
-            transform.localPosition = oriPos + subDif;
+            Vector2 screenPos = SmooothCamera.Instance.Camera3D.WorldToScreenPoint(mSubject.transform.position);
+            Vector2 screenSize = GameDirector.Instance.getPanelSize();
+            
+            //subject가 스크린 안에 있다면
+            if(screenPos.x >= -screenSize.x / 2 && screenPos.x <= screenSize.x / 2
+                && screenPos.y >= -screenSize.y / 2 && screenPos.y <= screenSize.y / 2)
+            {
+                transform.localPosition = screenPos + mOffset;
+            }
 
             yield return null;
         }

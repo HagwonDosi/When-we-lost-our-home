@@ -11,7 +11,6 @@ public class Player_Text : MonoBehaviour {
     public float fChek = 0.0f;
     public bool color_Chek = false;
     public EnemyStatus Enemy;
-    public ConvTestTrigger con;
 
     Vector3 Pos_;
     int count = 0;

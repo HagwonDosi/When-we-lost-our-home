@@ -54,7 +54,9 @@ public class InteractionTrigger : MonoBehaviour
 
         mSprite.spriteName = getInfo.mSpriteName;
         mSprite.alpha = 1;
+        Vector3 oriScale = mSprite.transform.localScale;
         mSprite.MakePixelPerfect();
+        mSprite.transform.localScale = oriScale;
 
         mTrigger = getInfo.mTrigger;
     }

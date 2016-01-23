@@ -4,8 +4,9 @@ using System.Collections;
 /// <summary>
 /// 카메라가 mObjec를 따라가게 하는 스크립트
 /// </summary>
-public class SmooothCamera : MonoBehaviour
+public class SmooothCamera : Singletone<SmooothCamera>
 {
+    #region Variables
     public Transform mObject = null;
     public float mSpeed = 10f;
     public Vector3 mOffset = Vector3.zero;
@@ -15,12 +16,33 @@ public class SmooothCamera : MonoBehaviour
     public bool mZTrack = true;
 
     private Camera mCamera = null;
+    private Camera mUICamera = null;
     private float mFieldOfView = 0f;
+    #endregion
+
+    #region Capsules
+    public Camera Camera3D
+    {
+        get
+        {
+            return mCamera;
+        }
+    }
+    public Camera CameraUI
+    {
+        get
+        {
+            return mUICamera;
+        }
+    }
+
+    #endregion
 
     #region VirtualFunction
     // Use this for initialization
     void Start()
     {
+        mUICamera = FindObjectOfType<UICamera>().camera;
         mCamera = GetComponent<Camera>();
         mFieldOfView = mCamera.fieldOfView;
         GoImmediately();
@@ -62,12 +84,33 @@ public class SmooothCamera : MonoBehaviour
 
     public void InBuildingSmooth()
     {
-        new TweenValue(mOffset.z, -1.4f, 0.5f, ref mOffset.z, this);
-        new TweenValue(mCamera.fieldOfView, 66f, 0.5f, ref mFieldOfView, this);
+        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default"));
+        StartCoroutine(InBuildingSmoothCor());
+    }
+
+    private IEnumerator InBuildingSmoothCor()
+    {
+        float sec = 0f;
+        while(true)
+        {
+            sec += Time.deltaTime;
+            float rate = sec / 1f;
+            mOffset = new Vector3(0, 0.8f, CustomMath.TweenValue(-2.26f, -1.4f, rate));
+            mFieldOfView = CustomMath.TweenValue(52f, 66f, rate);
+
+            Debug.Log("filedOfView " + mCamera.fieldOfView);
+            if(rate >= 1f)
+            {
+                StopAllCoroutines();
+                break;
+            }
+            yield return null;
+        }
     }
 
     public void OutBuilding()
     {
+        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("ExternBuilding"));
         mOffset = new Vector3(0, 0.8f, -2.26f);
         mFieldOfView = 52f;
     }
