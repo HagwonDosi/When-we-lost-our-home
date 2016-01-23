@@ -14,8 +14,7 @@ public class ShowPlayerStatus : MonoBehaviour
         public float mDuration;
         public float mValue;
     }
-
-    public ConversationFileControl mFileCon = null;
+    
     public List<StatusWarnInfo> mStatuses = new List<StatusWarnInfo>();
     public int mSpeechBubbleIndex = 0;
     public float mPeriod = 3f;
@@ -67,7 +66,7 @@ public class ShowPlayerStatus : MonoBehaviour
     void DisplayMsg()
     {
         Debug.Log("Display");
-        mFileCon.ShowTextByIndex(mStatuses[mCurInfoIndex].mMessageIndex, mSpeechBubbleIndex, mStatuses[mCurInfoIndex].mDuration);
+        SpeechBubbleDirector.Instance.ShowText(mSpeechBubbleIndex, "Player", mStatuses[mCurInfoIndex].mMessageIndex, mStatuses[mCurInfoIndex].mDuration);
     }
 
     IEnumerator UpdateInform()

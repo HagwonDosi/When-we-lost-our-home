@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// 카메라가 mObjec를 따라가게 하는 스크립트
 /// </summary>
-public class SmooothCamera : SingletoneDirector<SmooothCamera>
+public class SmooothCamera : Singletone<SmooothCamera>
 {
     #region Variables
     public Transform mObject = null;

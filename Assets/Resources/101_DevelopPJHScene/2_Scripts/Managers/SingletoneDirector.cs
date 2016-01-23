@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SingletoneDirector<T> : MonoBehaviour where T : SingletoneDirector<T>
+public class Singletone<T> : MonoBehaviour where T : Singletone<T>
 {
     private static T mInstance = null;
     

@@ -9,7 +9,8 @@ public enum InteractionType
     Stair,
     Exit,
     Enemy,
-    Item
+    Item,
+    NPC
 }
 
 /*

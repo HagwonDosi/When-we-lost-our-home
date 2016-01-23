@@ -4,24 +4,22 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class ObjectStringFloat
+public class ObjectStringVec2
 {
     public string mName = "";
     public GameObject mObject = null;
-    public float mFVal = 0f;
+    public Vector2 mVec2 = Vector2.zero;
 }
 
 /// <summary>
 /// NPC와 관련된 것을 관장하는 Director
 /// </summary>
-public class NPCDirector : SingletoneDirector<NPCDirector>
+public class NPCDirector : Singletone<NPCDirector>
 {
     #region Variables
     [SerializeField]
-    private List<ObjectStringFloat> mObjectList = new List<ObjectStringFloat>();
-    private Dictionary<string, ObjectStringFloat> mObjectDic = new Dictionary<string, ObjectStringFloat>();
-    [SerializeField]
-    private GameObject mSpeechBubblePre = null;
+    private List<ObjectStringVec2> mObjectList = new List<ObjectStringVec2>();
+    private Dictionary<string, ObjectStringVec2> mObjectDic = new Dictionary<string, ObjectStringVec2>();
 
     #endregion
 
@@ -67,7 +65,7 @@ public class NPCDirector : SingletoneDirector<NPCDirector>
 
     private GameObject MakeNPC(string fName, int fFloor, float fXPos, BuildingControl fBCon)
     {
-        ObjectStringFloat ori = null;
+        ObjectStringVec2 ori = null;
         GameObject npc = null;
         if(mObjectDic.TryGetValue(fName, out ori))
         {
@@ -75,14 +73,16 @@ public class NPCDirector : SingletoneDirector<NPCDirector>
             npc.transform.parent = fBCon.transform;
 
             npc.transform.localPosition = new Vector2(fXPos, fBCon.GetYByFloor(fFloor));
+
+            NPC con = npc.GetComponent<NPC>();
+
+            con.mSpeechBubbleIndex = SpeechBubbleDirector.Instance.MakeSpeechBubble(npc.transform, ori.mVec2);
+        }
+        else
+        {
+            Debug.LogWarning(name + "NPCDirector.MakeNPC() " + "npc " + fName + " was not found");
         }
 
-        GameObject bubble = Instantiate(mSpeechBubblePre) as GameObject;
-        bubble.transform.parent = UIDirector.Instance.GetUIAnchor(UIAnchor.Side.Center).transform;
-
-        Vector3 screen = SmooothCamera.Instance.Camera3D.WorldToScreenPoint(npc.transform.position);
-        screen.y += ori.mFVal;
-        bubble.transform.localPosition = screen;
 
         return npc;
     }

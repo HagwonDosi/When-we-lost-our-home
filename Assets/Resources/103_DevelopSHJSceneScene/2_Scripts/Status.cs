@@ -66,7 +66,6 @@ public class Status : MonoBehaviour
         StatMinMax getVal;
         if(mStatusList.TryGetValue(name, out getVal))
         {
-            Debug.Log(name + " set val " + val);
             getVal.mVal = val;
 
             if (getVal.mVal < getVal.mMin)
