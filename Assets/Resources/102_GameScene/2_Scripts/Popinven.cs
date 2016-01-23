@@ -17,7 +17,7 @@ public class Popinven : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -32,14 +32,15 @@ public class Popinven : MonoBehaviour
 
     public void OpenInven() //인벤토리를 만듭니다.
     {
+        UIDirector.Instance.SetEnabledUILayer(0, false);
         Bage_Size = mData.BageSize;
-        for (int i = 0; i < Bage_Size; )
+        for (int i = 0; i < Bage_Size;)
         {
             Item_image[i].spriteName = "Gear";
             i++;
         }
 
-            Item_Chek();
+        Item_Chek();
         inventory.transform.localPosition = new Vector3(0, 0, 0);
         MakeItem();
         //GameObject Inven = (GameObject)Instantiate(inventory);
@@ -59,7 +60,7 @@ public class Popinven : MonoBehaviour
 
         foreach (var iter in Item_Info)
         {
-            if(iter == "SmokedFood")
+            if (iter == "SmokedFood")
             {
                 Item_image[chek].spriteName = "SmokedFood";
             }

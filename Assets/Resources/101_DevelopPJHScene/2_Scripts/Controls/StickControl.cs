@@ -15,6 +15,7 @@ public class StickControl : MonoBehaviour
     private bool mTouched = false;
     private Vector3 mTouchVector;
     private Matrix4x4 mOriMat;
+    private Collider mCollider = null;
     /// <summary>
     /// 원래 터치할 때 찍은 지점
     /// </summary>
@@ -38,6 +39,7 @@ public class StickControl : MonoBehaviour
             mBackground.alpha = 0;
         }
 
+        mCollider = GetComponent<Collider>();
         Matrix4x4 mat = transform.worldToLocalMatrix;
         mOriginalLocal = mat * transform.position;
 	}
@@ -95,7 +97,7 @@ public class StickControl : MonoBehaviour
 
     void LateUpdate()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && mCollider.enabled)
         {
             //마우스 클릭
             Vector3 mouse = mMainCamera.ScreenToWorldPoint(Input.mousePosition);

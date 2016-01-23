@@ -25,25 +25,12 @@ public class MapLoader : MonoBehaviour
     public float mMagnification = 1f;
     public Vector3 mOffset = Vector3.zero;
     public string mFileName = "";
-    public List<PrefabInfo> mPrefabList;
     public Transform mBuildingPos = null;
     public bool mLoadExternMap = false;
 
     private string mVersion = "1.2.0";
-    private Dictionary<string, GameObject> mBuildingInfo = new Dictionary<string, GameObject>();
-    private GameObject mCurBuilding = null;
     #endregion
 
-    #region get/setter
-    public GameObject CurBuiding
-    {
-        get
-        {
-            return mCurBuilding;
-        }
-    }
-
-    #endregion
 
     #region VirtualFunctions
     // Use this for initialization
@@ -52,10 +39,7 @@ public class MapLoader : MonoBehaviour
         if(mLoadExternMap)
             LoadExternMap();
 
-        foreach(var iter in mPrefabList)
-        {
-            mBuildingInfo.Add(iter.mPrefabName, iter.mObject);
-        }
+        
 	}
 
 
@@ -203,23 +187,7 @@ public class MapLoader : MonoBehaviour
         }
     }
 
-    public void LoadPrefabMap(string fMapName)
-    {
-        GameObject prefab = null;
-
-        if(mBuildingInfo.TryGetValue(fMapName, out prefab))
-        {
-            GameObject building = Instantiate(prefab, mBuildingPos.position, Quaternion.Euler(0, 0, 0)) as GameObject;
-
-            building.GetComponent<BuildingControl>().mBuildingName = fMapName;
-            mCurBuilding = building;
-            //mCurBuilding.GetComponent<BuildingControl>().SetPlayer();
-        }
-        else
-        {
-            Debug.LogWarning(gameObject.name + ".MapLoader.LoadPrefabMap() " + "Map doesn't exist");
-        }
-    }
+    
 
     #endregion
 }
