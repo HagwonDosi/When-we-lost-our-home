@@ -27,6 +27,7 @@ public class EntranceTrigger : UITrigger
             return;
         }
 
+        UIDirector.Instance.SetEnabledUILayer(0, false);
         mLoader.LoadPrefabMap(ent.mEntranceTo);
         mLoader.AddExitInCurBuiding(ent);
         mPCon.mCheckAni = false;
@@ -96,7 +97,7 @@ public class EntranceTrigger : UITrigger
     /// <returns></returns>
     private IEnumerator WalkInBuilding()
     {
-        mCamera.InBuilding();
+        mCamera.InBuildingSmooth();
         GameObject player = GameDirector.Instance.Player;
         float targetZ = mLoader.CurBuiding.GetComponent<BuildingControl>().mExit.transform.position.z;
         while (player.transform.position.z <= targetZ)
@@ -117,6 +118,7 @@ public class EntranceTrigger : UITrigger
 
         yield return new WaitForSeconds(0.3f);
 
+        UIDirector.Instance.SetEnabledUILayer(0, true);
         mAnimator.SetBool("Player_Run", false);
         mLoader.CurExternBuildingControl.Animator.SetBool("Opened", false);
         mPCon.mCheckAni = true;

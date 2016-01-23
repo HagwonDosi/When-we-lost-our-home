@@ -28,4 +28,11 @@ public class CustomMath
 
         return (double)nPart * pow10;
     }
+
+    public static float TweenValue(float fOri, float fTarget, float fRate)
+    {
+        float val = (1f - fRate) * fOri + fRate * fTarget;
+
+        return val;
+    }
 }

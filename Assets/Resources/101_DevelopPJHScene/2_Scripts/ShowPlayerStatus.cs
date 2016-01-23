@@ -57,7 +57,6 @@ public class ShowPlayerStatus : MonoBehaviour
         if (mCurValue < minVal)
             mBefMin = minVal;
 
-        Debug.Log("max " + maxVal + " min " + minVal + " befMin " + mBefMin);
         if(mCurValue <= maxVal && mCurValue >= minVal)
         {
             mIsInforming = true;

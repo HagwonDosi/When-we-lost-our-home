@@ -107,6 +107,7 @@ public class BuildingLoader : MonoBehaviour
                 building.GetComponent<BuildingControl>().mBuildingName = fMapName;
                 mCurExternBuilding = conEnt.ExtCon;
                 mCurBuilding = building;
+                NPCDirector.Instance.MapLoaded(fMapName, mCurBuilding.GetComponent<BuildingControl>());
                 //mCurBuilding.GetComponent<BuildingControl>().SetPlayer();
             }
             else

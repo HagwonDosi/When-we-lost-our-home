@@ -1,15 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SingletoneDirector : MonoBehaviour {
+public class SingletoneDirector<T> : MonoBehaviour where T : SingletoneDirector<T>
+{
+    private static T mInstance = null;
+    
+    public static T Instance
+    {
+        get
+        {
+            if(mInstance == null)
+            {
+                mInstance = FindObjectOfType<T>();
+            }
+            if(mInstance == null)
+            {
+                Debug.LogWarning(typeof(T).ToString() + " is not exist on hierarchy");
+            }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+            return mInstance;
+        }
+    }
 }

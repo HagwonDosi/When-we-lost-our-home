@@ -16,6 +16,8 @@ public class BuildingControl : MonoBehaviour
     private GameObject mEntrance = null;
     private float mMaxFloor = 0f;
     private List<GameObject> mFloors = new List<GameObject>();
+    [SerializeField]
+    private float mHeightPerFloor = 0f;
     #endregion
 
     #region get/setter
@@ -53,12 +55,6 @@ public class BuildingControl : MonoBehaviour
             }
         }
 	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-	    
-	}
 
     void OnDestroy()
     {
@@ -68,7 +64,12 @@ public class BuildingControl : MonoBehaviour
     #endregion
 
     #region CustomFunctions
-    
+
+    public float GetYByFloor(int fFloor)
+    {
+        return ((fFloor - 1) * mHeightPerFloor);
+    }
+
     public void AddFloor(GameObject floor)
     {
         mMaxFloor += 1;
