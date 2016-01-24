@@ -28,6 +28,18 @@ public class BuildingControl : MonoBehaviour
             return mMaxFloor;
         }
     }
+    public float HeightPerFloor
+    {
+        get
+        {
+            return mHeightPerFloor;
+        }
+        set
+        {
+            Debug.Log("mHeightPerFloor set to " + value);
+            mHeightPerFloor = value;
+        }
+    }
     #endregion
 
     #region VirtualFuctions

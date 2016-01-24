@@ -83,7 +83,7 @@ public class MapLoader : MonoBehaviour
 
     private void MakePlayerPos (float fXPos)
     {
-        mPlayerPos.localPosition = new Vector3(fXPos * mMagnification, GetYByFloor(1), mOffset.z);
+        //mPlayerPos.localPosition = new Vector3(fXPos * mMagnification, GetYByFloor(1), mOffset.z);
     }
 
     private void MakeModel(string fName, int fFloor, float xPos)
@@ -185,6 +185,10 @@ public class MapLoader : MonoBehaviour
 
             MakeModel(name, arrFloor, xPos);
         }
+
+        BuildingControl bCon = mBuilding.AddComponent<BuildingControl>();
+        bCon.name = mFileName;
+        bCon.HeightPerFloor = mHeightOfFloor;
     }
 
     
