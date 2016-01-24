@@ -15,7 +15,7 @@ public class Singletone<T> : MonoBehaviour where T : Singletone<T>
             }
             if(mInstance == null)
             {
-                Debug.LogWarning(typeof(T).ToString() + " is not exist on hierarchy");
+                Debug.LogWarning(typeof(T).ToString() + " does not exist on hierarchy");
             }
 
             return mInstance;
