@@ -5,11 +5,15 @@ using System.Collections.Generic;
 public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
 {
     #region Variables
+    public bool mSpeechBubbleShow = true;
+
     private List<SpeechBubbleControl> mControlList = new List<SpeechBubbleControl>();
     private Dictionary<string, ConversationFileControl> mConvDic = new Dictionary<string, ConversationFileControl>();
     private List<SpeechBubbleControl> mTouchedBubbles = new List<SpeechBubbleControl>();
     [SerializeField]
     private GameObject mSpeechBubble = null;
+    [SerializeField]
+    private int mCurDepth = 2;
     #endregion
 
     public List<SpeechBubbleControl> ControlList
@@ -41,7 +45,7 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
     #endregion
 
     #region CustomFunctions
-    public int MakeSpeechBubble(Transform fObj, Vector2 fOffset)
+    public SpeechBubbleControl MakeSpeechBubble(Transform fObj, Vector2 fOffset)
     {
         GameObject bubble = Instantiate(mSpeechBubble) as GameObject;
         bubble.transform.parent = UIDirector.Instance.GetUIAnchor(UIAnchor.Side.Center).transform;
@@ -50,18 +54,35 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
         bubble.transform.localPosition = screen;
         bubble.transform.localScale = Vector3.one;
 
+        mCurDepth += 2;
         SpeechBubbleControl con = bubble.GetComponent<SpeechBubbleControl>();
         con.mSubject = fObj.gameObject;
         con.mOffset = fOffset;
+        con.SetDepth(mCurDepth);
 
         mControlList.Add(con);
 
-        return mControlList.Count - 1;
+        return con;
     }
 
     public bool RemoveSpeechBubble(SpeechBubbleControl fCon)
     {
         return mControlList.Remove(fCon);
+    }
+
+    public bool RemoveSpeechBubble(int fIdx)
+    {
+        if(fIdx >= 0 && fIdx < mControlList.Count)
+        {
+            Destroy(mControlList[fIdx].gameObject);
+            mControlList.RemoveAt(fIdx);
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void SpeechBubbleTouched(SpeechBubbleControl fCon)
@@ -78,22 +99,43 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
     /// <param name="fDuration">표시할 시간</param>
     public void ShowText(int fSpeechIdx, string fConvName, int fConvIdx, float fDuration)
     {
-        if(fSpeechIdx < 0 || fSpeechIdx >= mControlList.Count)
+        if(mSpeechBubbleShow)
         {
-            Debug.LogWarning(name + ".SpeechBubbleDirector.ShowText() " + "fSpeechIdx is out of Range");
-            return;
-        }
-
-        ConversationFileControl convCon = null;
-        if(mConvDic.TryGetValue(fConvName, out convCon))
-        {
-            if(fConvIdx < 0 || fConvIdx >= convCon.ConvsList.Count)
+            if (fSpeechIdx < 0 || fSpeechIdx >= mControlList.Count)
             {
-                Debug.LogWarning(name + ".SpeechBubbleDirector.ShowText() " + "fConvIdx is out of Range");
+                Debug.LogWarning(name + ".SpeechBubbleDirector.ShowText() " + "fSpeechIdx is out of Range");
                 return;
             }
 
-            mControlList[fSpeechIdx].ShowText(convCon.ConvsList[fConvIdx], fDuration);
+            ConversationFileControl convCon = null;
+            if (mConvDic.TryGetValue(fConvName, out convCon))
+            {
+                if (fConvIdx < 0 || fConvIdx >= convCon.ConvsList.Count)
+                {
+                    Debug.LogWarning(name + ".SpeechBubbleDirector.ShowText() " + "fConvIdx is out of Range");
+                    return;
+                }
+
+                mControlList[fSpeechIdx].ShowText(convCon.ConvsList[fConvIdx], fDuration);
+            }
+        }
+    }
+
+    public void ShowText(SpeechBubbleControl fCon, string fConvName, int fConvIdx, float fDuration)
+    {
+        if (mSpeechBubbleShow)
+        {
+            ConversationFileControl convCon = null;
+            if (mConvDic.TryGetValue(fConvName, out convCon))
+            {
+                if (fConvIdx < 0 || fConvIdx >= convCon.ConvsList.Count)
+                {
+                    Debug.LogWarning(name + ".SpeechBubbleDirector.ShowText() " + "fConvIdx is out of Range");
+                    return;
+                }
+
+                fCon.ShowText(convCon.ConvsList[fConvIdx], fDuration);
+            }
         }
     }
     #endregion

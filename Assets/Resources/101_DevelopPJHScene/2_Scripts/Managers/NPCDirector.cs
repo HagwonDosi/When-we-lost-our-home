@@ -76,7 +76,7 @@ public class NPCDirector : Singletone<NPCDirector>
 
             NPC con = npc.GetComponent<NPC>();
 
-            con.mSpeechBubbleIndex = SpeechBubbleDirector.Instance.MakeSpeechBubble(npc.transform, ori.mVec2);
+            con.mSpeechBubble = SpeechBubbleDirector.Instance.MakeSpeechBubble(npc.transform, ori.mVec2);
         }
         else
         {

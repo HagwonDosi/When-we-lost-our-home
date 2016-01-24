@@ -31,10 +31,7 @@ public class Stair : MonoBehaviour
     public void UseStair(GameObject fObj)
     {
         Debug.Log("pre use stair");
-        TweenPosition tPosition = fObj.GetComponent<TweenPosition>();
-        CapsuleCollider collider = fObj.GetComponent<CapsuleCollider>();
-
-        mHeight = (collider.height) * fObj.transform.localScale.y;
+        SpeechBubbleDirector.Instance.mSpeechBubbleShow = false;
 
         if(fObj.tag.Equals("Player"))
         {
@@ -99,30 +96,10 @@ public class Stair : MonoBehaviour
             yield return null;
         }
 
-        TweenRotation tRot = fObj.GetComponent<TweenRotation>();
-        tRot.enabled = true;
-        tRot.from = fObj.transform.localEulerAngles;
-
-        float target = 90f;
-        if (Mathf.Round(fObj.transform.localEulerAngles.y) == 0f)
-        {
-
-        }
-        else if (Mathf.Round(fObj.transform.localEulerAngles.y) == 360f)
-        {
-
-        }
-
-        tRot.to = new Vector3(fObj.transform.localEulerAngles.x, target, fObj.transform.localEulerAngles.z);
-        tRot.duration = 0.3f;
-        tRot.ResetToBeginning();
-
-        yield return new WaitForSeconds(0.3f);
-
         Vector3 oriPos = Vector3.zero;
         Vector3 targetPos = Vector3.zero;
 
-        if(up)
+        if (up)
         {
             Vector3 dif = mDown.position - fObj.position;
             Debug.Log("dif " + dif);
@@ -139,6 +116,23 @@ public class Stair : MonoBehaviour
             targetPos = mDown.position - dif;
         }
 
+        TweenRotation tRot = fObj.GetComponent<TweenRotation>();
+        tRot.enabled = true;
+        tRot.from = fObj.transform.localEulerAngles;
+
+        float target = 90f;
+        if (oriPos.x >= targetPos.x)
+        {
+            target = -90f;
+        }
+
+        tRot.to = new Vector3(fObj.transform.localEulerAngles.x, target, fObj.transform.localEulerAngles.z);
+        tRot.duration = 0.3f;
+        tRot.ResetToBeginning();
+
+        yield return new WaitForSeconds(0.3f);
+
+
         Debug.Log("use stair");
         SmooothCamera.Instance.enabled = false;
 
@@ -154,18 +148,15 @@ public class Stair : MonoBehaviour
         }
 
         SmooothCamera.Instance.enabled = true;
+        SmooothCamera.Instance.mSpeed = 4f;
         
         tRot.enabled = true;
         tRot.from = fObj.transform.localEulerAngles;
 
         target = 180f;
-        if (Mathf.Round(fObj.transform.localEulerAngles.y) == 0f)
+        if (oriPos.x >= targetPos.x)
         {
-
-        }
-        else if (Mathf.Round(fObj.transform.localEulerAngles.y) == 360f)
-        {
-
+            target = 180f;
         }
 
         tRot.to = new Vector3(fObj.transform.localEulerAngles.x, target, fObj.transform.localEulerAngles.z);
@@ -183,6 +174,8 @@ public class Stair : MonoBehaviour
             yield return null;
         }
 
+        SmooothCamera.Instance.mSpeed = 40f;
+        SpeechBubbleDirector.Instance.mSpeechBubbleShow = true;
         mPCon.rigidbody.useGravity = true;
         mPCon.mCheckAni = true;
         mPCon.mAnimator.SetBool("Player_Run", false);
