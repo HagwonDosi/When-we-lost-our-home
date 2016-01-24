@@ -3,7 +3,7 @@ using System.Collections;
 
 public class NPC : MonoBehaviour
 {
-    public int mSpeechBubbleIndex = 0;
+    public SpeechBubbleControl mSpeechBubble = null;
 
     private string mNPCName = "";
     
@@ -13,9 +13,14 @@ public class NPC : MonoBehaviour
     {
         mNPCName = new string(name.ToCharArray(), 0, name.Length - 7);
 	}
+
+    void OnDestroy()
+    {
+        Destroy(mSpeechBubble.gameObject);
+    }
 	
     public void MakeConversation()
     {
-        SpeechBubbleDirector.Instance.ShowText(mSpeechBubbleIndex, mNPCName, 0, 3f);
+        SpeechBubbleDirector.Instance.ShowText(mSpeechBubble, mNPCName, 0, 3f);
     }
 }

@@ -84,7 +84,6 @@ public class SmooothCamera : Singletone<SmooothCamera>
 
     public void InBuildingSmooth()
     {
-        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default"));
         StartCoroutine(InBuildingSmoothCor());
     }
 
@@ -106,6 +105,7 @@ public class SmooothCamera : Singletone<SmooothCamera>
             }
             yield return null;
         }
+        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default"));
     }
 
     public void OutBuilding()

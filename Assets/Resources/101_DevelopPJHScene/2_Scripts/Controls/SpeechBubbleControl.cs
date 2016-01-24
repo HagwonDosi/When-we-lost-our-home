@@ -215,5 +215,11 @@ public class SpeechBubbleControl : MonoBehaviour
         mScale.duration = 0.1f;
         mScale.ResetToBeginning();
     }
+
+    public void SetDepth(int depth)
+    {
+        mBackgroundSpr.depth = depth;
+        mText.mLabel.depth = depth + 1;
+    }
     #endregion
 }
