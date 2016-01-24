@@ -10,24 +10,16 @@ public class Stair : MonoBehaviour
     public Transform mDown = null;
     public Transform mUp = null;
 
+    [SerializeField]
+    private float mSpeed = 0.03f;
     private float mOriginalZ = 0f;
     private float mHeight = 0f;
     private bool mPlayer = false;
     private PlayerControl mPCon = null;
+    private float mOriDeg;
     #endregion
 
     #region VirtualFunctions
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     #endregion
 
     #region CustomFunctions
@@ -35,7 +27,7 @@ public class Stair : MonoBehaviour
     /// <summary>
     /// 어떤 Object가 계단을 사용한다.
     /// </summary>
-    /// <param name="fObj">계단을 사용할 오브젝트: TweenPosition, CapsuleCollider을 갖고 있을 것</param>
+    /// <param name="fObj">계단을 사용할 오브젝트: TweenRotation, CapsuleCollider을 갖고 있을 것</param>
     public void UseStair(GameObject fObj)
     {
         Debug.Log("pre use stair");
@@ -48,9 +40,30 @@ public class Stair : MonoBehaviour
         {
             mPCon = fObj.GetComponent<PlayerControl>();
 
-
+            mPCon.mCheckAni = false;
+            mPCon.mAnimator.SetBool("Player_Run", true);
+            mPCon.rigidbody.useGravity = false;
         }
 
+        TweenRotation tRot = fObj.GetComponent<TweenRotation>();
+        tRot.enabled = true;
+        tRot.from = fObj.transform.localEulerAngles;
+
+        float target = 0f;
+        if (Mathf.Round(fObj.transform.localEulerAngles.y) == 90f)
+        {
+            mOriDeg = 90f;
+            target = 0f;
+        }
+        else if (Mathf.Round(fObj.transform.localEulerAngles.y) == 270)
+        {
+            mOriDeg = 270f;
+            target = 360f;
+        }
+        
+        tRot.to = new Vector3(fObj.transform.localEulerAngles.x, target, fObj.transform.localEulerAngles.z);
+        tRot.duration = 0.3f;
+        tRot.ResetToBeginning();
 
         mOriginalZ = fObj.transform.localPosition.z;
         //위와 아래 중에서 어디에 더 가까운지 거리로 확인
@@ -59,75 +72,126 @@ public class Stair : MonoBehaviour
 
         if(upYDif < downYDif)
         {
-            tPosition.enabled = true;
-            tPosition.duration = 0.5f;
-            tPosition.from = fObj.transform.localPosition;
-            
-            fObj.transform.position = mUp.transform.position;
-            tPosition.to = new Vector3(fObj.transform.localPosition.x, fObj.transform.localPosition.y + mHeight / 2, fObj.transform.localPosition.z);
-            fObj.transform.localPosition = tPosition.from;
-            tPosition.ResetToBeginning();
-
-            StartCoroutine(ReserveUseStair(tPosition, false, fObj.transform));
+            StartCoroutine(ReserveUseStair(false, fObj.transform));
         }
         else
         {
-            tPosition.enabled = true;
-            tPosition.duration = 0.5f;
-            tPosition.from = fObj.transform.localPosition;
-
-            fObj.transform.position = mDown.transform.position;
-            tPosition.to = new Vector3(fObj.transform.localPosition.x, fObj.transform.localPosition.y + mHeight / 2, fObj.transform.localPosition.z);
-            fObj.transform.localPosition = tPosition.from;
-            tPosition.ResetToBeginning();
-
-            StartCoroutine(ReserveUseStair(tPosition, true, fObj.transform));
+            StartCoroutine(ReserveUseStair(true, fObj.transform));
         }
     }
     
     /// <summary>
-    /// 0.5초 후에 계단을 오르거나 내릴 스크립트
+    /// 뒤에 계단이 있는 곳으로 나가서 오르락, 내리락하는 스크립트
     /// </summary>
-    /// <param name="tPosition">사용할 TweenPosition</param>
     /// <param name="up">true라면 위로 false라면 아래로</param>
     /// <returns></returns>
-    private IEnumerator ReserveUseStair(TweenPosition tPosition, bool up, Transform fObj)
+    private IEnumerator ReserveUseStair(bool up, Transform fObj)
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
 
-        Debug.Log("use stair");
-        tPosition.enabled = true;
-        tPosition.duration = 1.0f;
+        float targetZ = mUp.transform.position.z;
+        while(fObj.transform.position.z <= targetZ)
+        {
+            Vector3 curPos = fObj.position;
+            curPos.z += mSpeed * Time.deltaTime * 62.5f;
+            fObj.position = curPos;
+
+            yield return null;
+        }
+
+        TweenRotation tRot = fObj.GetComponent<TweenRotation>();
+        tRot.enabled = true;
+        tRot.from = fObj.transform.localEulerAngles;
+
+        float target = 90f;
+        if (Mathf.Round(fObj.transform.localEulerAngles.y) == 0f)
+        {
+
+        }
+        else if (Mathf.Round(fObj.transform.localEulerAngles.y) == 360f)
+        {
+
+        }
+
+        tRot.to = new Vector3(fObj.transform.localEulerAngles.x, target, fObj.transform.localEulerAngles.z);
+        tRot.duration = 0.3f;
+        tRot.ResetToBeginning();
+
+        yield return new WaitForSeconds(0.3f);
+
+        Vector3 oriPos = Vector3.zero;
+        Vector3 targetPos = Vector3.zero;
+
         if(up)
         {
-            tPosition.from = tPosition.to;
-            fObj.position = mUp.position;
-            tPosition.to = new Vector3(fObj.transform.localPosition.x, fObj.transform.localPosition.y + mHeight / 2, fObj.transform.localPosition.z);
-            fObj.localPosition = tPosition.from;
+            Vector3 dif = mDown.position - fObj.position;
+            Debug.Log("dif " + dif);
+
+            oriPos = mDown.position - dif;
+            targetPos = mUp.position - dif;
         }
         else
         {
+            Vector3 dif = mUp.position - fObj.position;
+            Debug.Log("dif " + dif);
 
-            tPosition.from = tPosition.to;
-            fObj.position = mDown.position;
-            tPosition.to = new Vector3(fObj.transform.localPosition.x, fObj.transform.localPosition.y + mHeight / 2, fObj.transform.localPosition.z);
-            fObj.localPosition = tPosition.from;
+            oriPos = mUp.position - dif;
+            targetPos = mDown.position - dif;
         }
 
-        tPosition.ResetToBeginning();
+        Debug.Log("use stair");
+        SmooothCamera.Instance.enabled = false;
 
-        StartCoroutine(ReserveGetBackRoad(tPosition));
-    }
+        float sec = 0f;
+        float rate = 0f;
+        while(rate <= 1f)
+        {
+            sec += Time.deltaTime;
+            rate = sec / 2f;
+            fObj.position = Vector3.Lerp(oriPos, targetPos, rate);
 
-    private IEnumerator ReserveGetBackRoad(TweenPosition tPosition)
-    {
-        yield return new WaitForSeconds(1.0f);
+            yield return null;
+        }
 
-        tPosition.enabled = true;
-        tPosition.duration = 0.5f;
-        tPosition.from = tPosition.to;
-        tPosition.to = new Vector3(tPosition.from.x, tPosition.from.y, mOriginalZ);
-        tPosition.ResetToBeginning();
+        SmooothCamera.Instance.enabled = true;
+        
+        tRot.enabled = true;
+        tRot.from = fObj.transform.localEulerAngles;
+
+        target = 180f;
+        if (Mathf.Round(fObj.transform.localEulerAngles.y) == 0f)
+        {
+
+        }
+        else if (Mathf.Round(fObj.transform.localEulerAngles.y) == 360f)
+        {
+
+        }
+
+        tRot.to = new Vector3(fObj.transform.localEulerAngles.x, target, fObj.transform.localEulerAngles.z);
+        tRot.duration = 0.3f;
+        tRot.ResetToBeginning();
+
+        yield return new WaitForSeconds(0.3f);
+
+        while (fObj.transform.position.z >= mOriginalZ)
+        {
+            Vector3 curPos = fObj.position;
+            curPos.z -= mSpeed * Time.deltaTime * 62.5f;
+            fObj.position = curPos;
+
+            yield return null;
+        }
+
+        mPCon.rigidbody.useGravity = true;
+        mPCon.mCheckAni = true;
+        mPCon.mAnimator.SetBool("Player_Run", false);
+        
+        tRot.enabled = true;
+        tRot.from = fObj.transform.localEulerAngles;
+        tRot.to = new Vector3(fObj.transform.localEulerAngles.x, mOriDeg, fObj.transform.localEulerAngles.z);
+        tRot.duration = 0.3f;
+        tRot.ResetToBeginning();
     }
 
     #endregion
