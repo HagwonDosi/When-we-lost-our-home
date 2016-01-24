@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /*
  * 이 스크립트는 말풍선 오브젝트에 붙여서 말풍선에 관한 전체적인 것을 조율하게 하는 스크립트
@@ -20,6 +21,7 @@ public class SpeechBubbleControl : MonoBehaviour
     private TweenScale mScale = null;
     private UIWidget mWidget = null;
     private bool isTalking = false;
+    private Dictionary<string, float> mReserveStrings = new Dictionary<string, float>();
     #endregion
 
     #region Capsules
@@ -117,6 +119,8 @@ public class SpeechBubbleControl : MonoBehaviour
         else
         {
             Debug.LogWarning(gameObject.name + ".ShowText " + "isTaking is true");
+            if(!mReserveStrings.ContainsKey(fStr))
+                mReserveStrings.Add(fStr, fSec);
 
             return false;
         }
@@ -214,12 +218,25 @@ public class SpeechBubbleControl : MonoBehaviour
         mScale.to = Vector3.zero;
         mScale.duration = 0.1f;
         mScale.ResetToBeginning();
+
+        yield return new WaitForSeconds(0.1f);
+        ShowReservedStr();
     }
 
     public void SetDepth(int depth)
     {
         mBackgroundSpr.depth = depth;
         mText.mLabel.depth = depth + 1;
+    }
+
+    private void ShowReservedStr()
+    {
+        foreach(var iter in mReserveStrings)
+        {
+            ShowText(iter.Key, iter.Value);
+            mReserveStrings.Remove(iter.Key);
+            break;
+        }
     }
     #endregion
 }
