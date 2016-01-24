@@ -20,9 +20,14 @@ public class Popinven : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator SyncListItem()
     {
+        while (true)
+        {
+            MakeItem();
+
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 
     public void Item_Chek()
@@ -42,15 +47,7 @@ public class Popinven : MonoBehaviour
 
         Item_Chek();
         inventory.transform.localPosition = new Vector3(0, 0, 0);
-        MakeItem();
-        //GameObject Inven = (GameObject)Instantiate(inventory);
-
-        //Inven.transform.parent
-        //= GameObject.Find("CC_Offset").transform;
-
-        //Inven.transform.localPosition =
-        //    new Vector3(0, 0, 0);
-        //Inven.transform.localScale = Vector3.one;
+        StartCoroutine(SyncListItem());
     }
 
     int chek = 0; // 아래 MakeItem이 몇번 돌아갔는지 체크
@@ -63,10 +60,12 @@ public class Popinven : MonoBehaviour
             if (iter == "SmokedFood")
             {
                 Item_image[chek].spriteName = "SmokedFood";
+                Item_image[chek].GetComponent<ItemInfo>().Item_Name = iter;
             }
             if (iter == "CannedFood")
             {
                 Item_image[chek].spriteName = "CannedFood";
+                Item_image[chek].GetComponent<ItemInfo>().Item_Name = iter;
             }
 
             chek++;
