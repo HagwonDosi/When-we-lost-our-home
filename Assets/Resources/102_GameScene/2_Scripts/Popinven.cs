@@ -54,7 +54,8 @@ public class Popinven : MonoBehaviour
 
     public void MakeItem()
     {
-
+        Debug.Log("SyncItem");
+        Item_Info = mData.Items;
         foreach (var iter in Item_Info)
         {
             if (iter == "SmokedFood")

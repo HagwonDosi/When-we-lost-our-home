@@ -4,6 +4,8 @@ using System.Collections;
 public class GameDirector : MonoBehaviour
 {
     #region Variables
+    public float mEventSpeed = 0.02f;
+
     private static GameDirector mInstance = null;
 
     [SerializeField]

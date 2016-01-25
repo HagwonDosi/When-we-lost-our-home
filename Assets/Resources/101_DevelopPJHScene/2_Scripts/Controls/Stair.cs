@@ -20,6 +20,10 @@ public class Stair : MonoBehaviour
     #endregion
 
     #region VirtualFunctions
+    void Start()
+    {
+        mSpeed = GameDirector.Instance.mEventSpeed;
+    }
     #endregion
 
     #region CustomFunctions
@@ -174,7 +178,7 @@ public class Stair : MonoBehaviour
             yield return null;
         }
 
-        SmooothCamera.Instance.mSpeed = 40f;
+        SmooothCamera.Instance.mSpeed = 100f;
         SpeechBubbleDirector.Instance.mSpeechBubbleShow = true;
         mPCon.rigidbody.useGravity = true;
         mPCon.mCheckAni = true;
