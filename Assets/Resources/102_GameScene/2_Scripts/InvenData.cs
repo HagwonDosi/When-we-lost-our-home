@@ -32,8 +32,8 @@ public class InvenData : MonoBehaviour
     {
         if (BagLevel * 6 <= Count_Item)
         {
-            Debug.Log("Up");
             return;
+            Debug.Log("Up");
         }
         Debug.Log(item);
         Count_Item += 1;
@@ -50,7 +50,6 @@ public class InvenData : MonoBehaviour
         Debug.Log("remove");
         Debug.Log(item);
         items.Remove(item);
-        Count_Item -= 1;
     }
 
     /// <summary>
@@ -81,14 +80,6 @@ public class InvenData : MonoBehaviour
         if(Bag > BagLevel)
         {
             BagLevel = Bag;
-        }
-    }
-
-    public int BageSize
-    {
-        get
-        {
-            return BagLevel * 6;
         }
     }
 

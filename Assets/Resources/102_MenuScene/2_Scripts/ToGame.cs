@@ -16,6 +16,6 @@ public class ToGame : MonoBehaviour
 
     public void Togame()
     {
-        Application.LoadLevel(3);
+        Application.LoadLevel(4);
     }
 }

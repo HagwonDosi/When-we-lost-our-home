@@ -10,9 +10,8 @@ public class Popinven : MonoBehaviour
 
     public InvenData mData = null;  // InvenData가져오는 함수
 
-    public UISprite[] Item_image = null; // 인벤토리 이미지
-
-    int Bage_Size = 0;
+    int x; // 이미지의 x값
+    int y; // 이미지의 y값
 
     // Use this for initialization
     void Start()
@@ -20,67 +19,46 @@ public class Popinven : MonoBehaviour
 
     }
 
-    private IEnumerator SyncListItem()
+    // Update is called once per frame
+    void Update()
     {
-        while (true)
-        {
-            MakeItem();
 
-            yield return new WaitForSeconds(0.1f);
-        }
-    }
-
-    public void Item_Chek()
-    {
-        Item_Info = mData.GetList();
     }
 
     public void OpenInven() //인벤토리를 만듭니다.
     {
-        UIDirector.Instance.SetEnabledUILayer(0, false);
-        Bage_Size = mData.BageSize;
-        for (int i = 0; i < Bage_Size;)
-        {
-            Item_image[i].spriteName = "Gear";
-            i++;
-        }
+        GameObject Inven = (GameObject)Instantiate(inventory);
 
-        Item_Chek();
-        inventory.transform.localPosition = new Vector3(0, 0, 0);
-        StartCoroutine(SyncListItem());
+        Inven.transform.parent
+        = GameObject.Find("CC_Offset").transform;
+
+        Inven.transform.localPosition =
+            new Vector3(0, 0, 0);
+        Inven.transform.localScale = Vector3.one;
     }
-
-    int chek = 0; // 아래 MakeItem이 몇번 돌아갔는지 체크
 
     public void MakeItem()
     {
+        x = 0;
+        y = 0;
 
         foreach (var iter in Item_Info)
         {
-            if (iter == "SmokedFood")
+            if (x >= 3)
             {
-                Item_image[chek].spriteName = "SmokedFood";
-                Item_image[chek].GetComponent<ItemInfo>().Item_Name = iter;
-            }
-            if (iter == "CannedFood")
-            {
-                Item_image[chek].spriteName = "CannedFood";
-                Item_image[chek].GetComponent<ItemInfo>().Item_Name = iter;
+                y += 1;
+                x = 0;
             }
 
-            chek++;
-
+            if(iter == "SmokedFood")
+            {
+                 
+            }
         }
-        chek = 0;
-    }
-
-    public void GetInfo()
-    {
-
     }
 
     public void CloseInven() //인벤토리를 닫습니다.
-    {
+    {   
         Destroy(this.gameObject);
     }
 }

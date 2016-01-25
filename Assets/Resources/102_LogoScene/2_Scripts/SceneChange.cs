@@ -19,6 +19,6 @@ public class SceneChange : MonoBehaviour {
 
     void NextScene()
     {
-        Application.LoadLevel(1);
+        Application.LoadLevel(3);
     }
 }

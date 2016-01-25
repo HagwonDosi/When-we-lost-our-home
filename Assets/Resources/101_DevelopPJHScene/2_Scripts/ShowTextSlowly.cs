@@ -12,9 +12,9 @@ public class ShowTextSlowly : MonoBehaviour
 
     private string mStrToShow = "NewLabel"; // 보여줄 전체 문자열
 
-    /*
-      * 보여주게 될 전체 문자열을 다 보여주었을 때의 크기를 알아오는 함수
-     */
+	/*
+     * 보여주게 될 전체 문자열을 다 보여주었을 때의 크기를 알아오는 함수
+    */
     public Vector2 getFullSize(string fStr)
     {
         string ori = mLabel.text;
@@ -31,7 +31,7 @@ public class ShowTextSlowly : MonoBehaviour
 
     public void setNewString(string fStr)
     {
-        if (mCanBeUsed)
+        if(mCanBeUsed)
         {
             mCanBeUsed = false;
             mStrToShow = fStr;
@@ -53,10 +53,10 @@ public class ShowTextSlowly : MonoBehaviour
         int curIdx = 0;
         float curTime = 0f;
 
-        while (true)
+        while(true)
         {
             //만약 모든 문자를 표시했다면
-            if (curIdx >= mStrToShow.Length)
+            if(curIdx >= mStrToShow.Length)
             {
                 mCanBeUsed = true;
                 StopCoroutine(UpdateShowingString());
@@ -64,12 +64,19 @@ public class ShowTextSlowly : MonoBehaviour
             }
             else
             {
-                if (curTime >= mSecPerLetter)
+                if(curTime >= mSecPerLetter)
                 {
                     curTime -= mSecPerLetter;
                     curIdx += 1;
 
-                    string outputStr = new string(mStrToShow.ToCharArray(), 0, curIdx);
+                    char[] str = new char[mStrToShow.Length];
+
+                    for(int i = 0; i < curIdx; i++)
+                    {
+                        str[i] = mStrToShow.ToCharArray()[i];
+                    }
+
+                    string outputStr = new string(str);
 
                     mLabel.text = outputStr;
                     mLabel.GetComponent<UIWidget>().MakePixelPerfect();

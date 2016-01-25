@@ -3,12 +3,13 @@ using System.Collections;
 
 public class HPBarControl : BarControl
 {
-    public Status mStatus = null;
+    public PlayerStatus mStatus = null;
 
 	// Use this for initialization
 	void Start ()
     {
-        mCurValue = mStatus.GetStatus("Health");
+        mMaxValue = 100f;
+        mCurValue = mStatus.HP;
 
         StartCoroutine(UpdateCurVal());
 
@@ -19,7 +20,7 @@ public class HPBarControl : BarControl
     {
         while(true)
         {
-            mCurValue = mStatus.GetStatus("Health");
+            mCurValue = mStatus.HP;
 
             yield return null;
         }

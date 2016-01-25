@@ -3,18 +3,8 @@ using System.Collections;
 
 public class GameTimer : MonoBehaviour
 {
-    #region Variables
-    [SerializeField]
-    /// <summary>
-    /// 시간계에서 하루가 현실세계의 몇 초인가
-    /// </summary>
-    private float mSecPerDay = 240f;
     private static GameTimer mInstance = null;
-    private int mDay = 0;
-    private float mSec = 0;
-    #endregion
 
-    #region Capsule
     public static GameTimer Instance
     {
         get
@@ -25,6 +15,11 @@ public class GameTimer : MonoBehaviour
             return mInstance;
         }
     }
+
+    public float mSecPerDay = 60f;
+
+    private int mDay = 0;
+    private float mSec = 0;
 
     public int Day
     {
@@ -41,11 +36,9 @@ public class GameTimer : MonoBehaviour
             return (mSec / mSecPerDay) * 24f;
         }
     }
-    #endregion
 
-
-    // Use this for initialization
-    void Start ()
+	// Use this for initialization
+	void Start ()
     {
         StartCoroutine(UpdateTime());
 	}

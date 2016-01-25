@@ -4,11 +4,9 @@ using System.Collections.Generic;
 
 public class Inventory : MonoBehaviour
 {
-    //public GameObject Item = null;          //얻은 아이템
+    public GameObject Item = null;          //얻은 아이템
     public InvenData mData = null;          //InvenData
-    //public InvenItemData Name = null;            //템이름
-
-    string Name;
+    public ItemInfo Name = null;            //템이름
 
 	// Use this for initialization
 	void Start ()
@@ -22,20 +20,9 @@ public class Inventory : MonoBehaviour
 	    
 	}
 
-    public void GetName(string name)
-    {
-        Name = name;
-        //ItemStatus();
-    }
 
-    void ItemStatus()
+    public void GetItem()
     {
-        //아이템 정보 뛰우기
-    }
-
-    public void RemoveItem()//아이템 삭제
-    {
-        mData.RemoveItem(Name);
-        Name = null;
+        mData.AddItem(Name.GetName());
     }
 }

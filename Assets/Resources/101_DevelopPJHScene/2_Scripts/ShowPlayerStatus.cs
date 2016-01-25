@@ -14,7 +14,8 @@ public class ShowPlayerStatus : MonoBehaviour
         public float mDuration;
         public float mValue;
     }
-    
+
+    public ConversationFileControl mFileCon = null;
     public List<StatusWarnInfo> mStatuses = new List<StatusWarnInfo>();
     public int mSpeechBubbleIndex = 0;
     public float mPeriod = 3f;
@@ -23,7 +24,6 @@ public class ShowPlayerStatus : MonoBehaviour
 
     private int mCurInfoIndex = 0;
     private bool mIsInforming = false;
-    private float mBefMin = 100f;
 
 	// Use this for initialization
 	protected void Start ()
@@ -33,40 +33,32 @@ public class ShowPlayerStatus : MonoBehaviour
 
     void DetermineToInform()
     {
-        float maxVal = 0;
-        float minVal = 0;
+        float maxVal = 100;
         int theIdx = 0;
+
+        if (mIsInforming)
+            maxVal = mStatuses[mCurInfoIndex].mValue;
 
         for(int i = 0; i < mStatuses.Count; i++)
         {
-            if(mStatuses[i].mValue <= mBefMin)
+            if (mStatuses[i].mValue < maxVal)
             {
-                if (maxVal < mStatuses[i].mValue)
-                {
-                    maxVal = mStatuses[i].mValue;
-                    theIdx = i;
-                }
-                else if (minVal < mStatuses[i].mValue)
-                {
-                    minVal = mStatuses[i].mValue;
-                }
+                maxVal = mStatuses[i].mValue;
+                theIdx = i;
             }
         }
 
-        if (mCurValue < minVal)
-            mBefMin = minVal;
-
-        if(mCurValue <= maxVal && mCurValue >= minVal)
+        if(mCurValue <= maxVal)
         {
             mIsInforming = true;
-            mCurInfoIndex = theIdx;
+            mCurValue = theIdx;
         }
     }
 
     void DisplayMsg()
     {
         Debug.Log("Display");
-        SpeechBubbleDirector.Instance.ShowText(mSpeechBubbleIndex, "Player", mStatuses[mCurInfoIndex].mMessageIndex, mStatuses[mCurInfoIndex].mDuration);
+        mFileCon.ShowTextByIndex(mStatuses[mCurInfoIndex].mMessageIndex, mSpeechBubbleIndex, mStatuses[mCurInfoIndex].mDuration);
     }
 
     IEnumerator UpdateInform()
