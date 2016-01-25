@@ -1,33 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// 아이템 슬롯에도 쓸 수 있는 스크립트
+/// </summary>
 public class ItemInfo : MonoBehaviour
 {
     public string Item_Name;
-    public Trade trade;
-    public bool Player;
-	// Use this for initialization
-	void Start ()
-    {
-	    
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-	
-	}
 
     public string GetName()
     {
         return Item_Name;
     }
 
-    public void GiveItem()
+    public void OnPress()
     {
-        if (Player == false)
-            trade.SetNList(transform.tag);
-        if (Player == true)
-            trade.SetPList(transform.tag);
+        ItemDirector.Instance.SelectedItem = Item_Name;
     }
 }

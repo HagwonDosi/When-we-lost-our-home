@@ -11,7 +11,6 @@ public class Trade : MonoBehaviour
     public InvenData NPC_Data;
     public InvenData Player_Data;
 
-
 	// Use this for initialization
 	void Start ()
     {
@@ -26,17 +25,12 @@ public class Trade : MonoBehaviour
 	    
 	}
         
-    public void accept()
+    public void accept()// 거래 함
     {
         NPC_Data.SetList(Player_Trade);
         Player_Data.SetList(NPC_Trade);
     }
 
-    public void refuse()
-    {
-        Player_Data.SetList(Player_Trade);
-        NPC_Data.SetList(NPC_Trade);
-    }
     
     public void SetPList(string Tag1)
     {
@@ -46,5 +40,12 @@ public class Trade : MonoBehaviour
     public void SetNList(string Tag2)
     {
         NPC_Trade.Add(Tag2);
+    }
+
+    public void refuse()//거래 안함
+    {
+
+       Player_Data.SetList(Player_Trade);
+        NPC_Data.SetList(NPC_Trade);
     }
 }

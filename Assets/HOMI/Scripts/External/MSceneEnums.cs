@@ -11,10 +11,13 @@ public enum E_H_RESOURCELOAD
     E_0_Common,             //!< PrefabMng안에 있는 전역 Resource에서 읽어와요(경고창 같은거^^)
     E_101_DevelopPJHScene,
     E_004_GameScene,
+    E_103_DevelopSHJSceneScene,
     E_102_LogoScene,
     E_102_MenuScene,
     E_102_GameScene,
     E_102_DeadScene,
     E_102_ParticleScene,
+    E_001_LogoScene,
+    E_002_MainScene,
     E_MAX
 }
