@@ -22,7 +22,7 @@ public class Inventory : MonoBehaviour
 	
 	}
 
-    public void GetName(string name)
+    public void GetName(string name)//아이템 선택시
     {
         Name = name;
         //ItemStatus();
@@ -33,9 +33,14 @@ public class Inventory : MonoBehaviour
         //아이템 정보 뛰우기
     }
 
-    public void RemoveItem()//아이템 삭제
+    public void RemoveItem()//아이템 삭제,수락
     {
         mData.RemoveItem(Name);
+        Name = null;
+    }
+
+    public void NoRemove()//거절
+    {
         Name = null;
     }
 
