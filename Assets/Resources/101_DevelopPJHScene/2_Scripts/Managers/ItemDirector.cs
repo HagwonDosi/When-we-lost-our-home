@@ -54,8 +54,8 @@ public class ItemDirector : Singletone<ItemDirector>
 
         if(mTriggerDic.TryGetValue(mSelectedItem, out trigger))
         {
-            mSelectedItem = "";
             mPlayerInven.RemoveItem(mSelectedItem);
+            mSelectedItem = "";
             trigger.Act();
         }
         else

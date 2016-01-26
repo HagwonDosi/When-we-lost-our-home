@@ -39,11 +39,6 @@ public class Popinven : MonoBehaviour
     {
         UIDirector.Instance.SetEnabledUILayer(0, false);
         Bage_Size = mData.BageSize;
-        for (int i = 0; i < Bage_Size;)
-        {
-            Item_image[i].spriteName = "Gear";
-            i++;
-        }
 
         Item_Chek();
         inventory.transform.localPosition = new Vector3(0, 0, 0);
@@ -54,8 +49,13 @@ public class Popinven : MonoBehaviour
 
     public void MakeItem()
     {
-        Debug.Log("SyncItem");
         Item_Info = mData.Items;
+        for (int i = 0; i < Bage_Size;)
+        {
+            Item_image[i].spriteName = "Gear";
+            i++;
+        }
+
         foreach (var iter in Item_Info)
         {
             if (iter == "SmokedFood")

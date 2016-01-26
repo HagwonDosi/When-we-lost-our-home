@@ -57,7 +57,7 @@ public class ItemTrigger : UITrigger
     {
         yield return new WaitForSeconds(0.3f);
 
-        float targetZ = mICon.transform.position.z - 0.1f;
+        float targetZ = mICon.transform.position.z - 0.3f;
         while(mPCon.transform.position.z <= targetZ)
         {
             Vector3 pos = mPCon.transform.position;
