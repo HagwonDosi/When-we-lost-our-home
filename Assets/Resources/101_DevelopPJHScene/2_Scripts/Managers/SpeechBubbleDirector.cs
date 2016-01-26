@@ -9,7 +9,7 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
 
     private List<SpeechBubbleControl> mControlList = new List<SpeechBubbleControl>();
     private Dictionary<string, ConversationFileControl> mConvDic = new Dictionary<string, ConversationFileControl>();
-    private List<SpeechBubbleControl> mTouchedBubbles = new List<SpeechBubbleControl>();
+    private SortedDictionary<int, SpeechBubbleControl> mTouchedBubbles = new SortedDictionary<int, SpeechBubbleControl>();
     [SerializeField]
     private GameObject mSpeechBubble = null;
     [SerializeField]
@@ -42,9 +42,35 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
         }
     }
 
+    void LateUpdate()
+    {
+        TouchedBubblesDepthControl();
+    }
     #endregion
 
     #region CustomFunctions
+    private void TouchedBubblesDepthControl()
+    {
+        if(mTouchedBubbles.Count >= 1)
+        {
+            foreach (var iter in mControlList)
+            {
+                iter.SetToBasicDepth();
+            }
+
+            Debug.Log("start update");
+            int upDepth = mCurDepth + 2;
+            foreach(var iter in mTouchedBubbles)
+            {
+                iter.Value.SetDepth(upDepth);
+                break;
+            }
+
+            mTouchedBubbles.Clear();
+        }
+        
+    }
+
     public SpeechBubbleControl MakeSpeechBubble(Transform fObj, Vector2 fOffset)
     {
         GameObject bubble = Instantiate(mSpeechBubble) as GameObject;
@@ -58,6 +84,7 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
         SpeechBubbleControl con = bubble.GetComponent<SpeechBubbleControl>();
         con.mSubject = fObj.gameObject;
         con.mOffset = fOffset;
+        con.BasicDepth = mCurDepth;
         con.SetDepth(mCurDepth);
 
         mControlList.Add(con);
@@ -87,7 +114,8 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
 
     public void SpeechBubbleTouched(SpeechBubbleControl fCon)
     {
-        mTouchedBubbles.Add(fCon);
+        Debug.Log("depth " + fCon.BasicDepth);
+        mTouchedBubbles.Add(fCon.CurDepth, fCon);
     }
 
     /// <summary>

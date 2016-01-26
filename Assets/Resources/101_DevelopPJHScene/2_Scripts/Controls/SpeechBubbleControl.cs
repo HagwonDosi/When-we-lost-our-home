@@ -11,7 +11,6 @@ public class SpeechBubbleControl : MonoBehaviour
     #region Variables
     public ShowTextSlowly mText = null;
     public GameObject mSubject = null;
-    public Camera mCamera = null;
     public float mStdWidth = 256f;
     public Vector2 mOffset = Vector2.zero;
 
@@ -21,6 +20,7 @@ public class SpeechBubbleControl : MonoBehaviour
     private TweenScale mScale = null;
     private UIWidget mWidget = null;
     private bool isTalking = false;
+    private int mBasicDepth = 2;
     private Dictionary<string, float> mReserveStrings = new Dictionary<string, float>();
     #endregion
 
@@ -30,6 +30,24 @@ public class SpeechBubbleControl : MonoBehaviour
         get
         {
             return mBackgroundSpr;
+        }
+    }
+    public int BasicDepth
+    {
+        get
+        {
+            return mBasicDepth;
+        }
+        set
+        {
+            mBasicDepth = value;
+        }
+    }
+    public int CurDepth
+    {
+        get
+        {
+            return mBackgroundSpr.depth;
         }
     }
 
@@ -51,23 +69,29 @@ public class SpeechBubbleControl : MonoBehaviour
     {
         SpeechBubbleDirector.Instance.RemoveSpeechBubble(this);
     }
+
+    void Update()
+    {
+        GetMouseInput();
+    }
     #endregion
 
     #region CustomFunction
     private void GetMouseInput()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && !mBackgroundSpr.transform.localScale.Equals(Vector3.zero))
         {
             Vector3 mouseLocal = mBackgroundCollider.transform.worldToLocalMatrix.
                 MultiplyPoint(SmooothCamera.Instance.CameraUI.ScreenToWorldPoint(Input.mousePosition));
 
             Vector2 center = mBackgroundCollider.center;
             Vector2 size = mBackgroundCollider.size;
-
-            if(mouseLocal.x >= center.x - (size.x / 2) && mouseLocal.x <= center.x + (size.x / 2)
-                && mouseLocal.y >= center.y - (size.y / 2) && mouseLocal.y <= center.y + (size.y / 2))
+            
+            if(mouseLocal.x >= 0 && mouseLocal.x <= size.x
+                && mouseLocal.y >= 0 && mouseLocal.y <= size.y)
             {
-
+                Debug.Log("touched");
+                SpeechBubbleDirector.Instance.SpeechBubbleTouched(this);
             }
         }
     }
@@ -81,6 +105,15 @@ public class SpeechBubbleControl : MonoBehaviour
         {
             Vector2 screenPos = SmooothCamera.Instance.Camera3D.WorldToScreenPoint(mSubject.transform.position);
             Vector2 screenSize = GameDirector.Instance.getPanelSize();
+            Vector2 cameraPixel = new Vector2(SmooothCamera.Instance.Camera3D.pixelWidth, SmooothCamera.Instance.Camera3D.pixelHeight);
+            screenPos.y -= cameraPixel.y / 2f;
+            screenPos.x -= cameraPixel.x / 2f;
+
+            float xRate = GameDirector.Instance.getPanelSize().x / cameraPixel.x;
+            float yRate = GameDirector.Instance.getPanelSize().y / cameraPixel.y;
+
+            screenPos.x *= xRate;
+            screenPos.y *= yRate;
             
             //subject가 스크린 안에 있다면
             if(screenPos.x >= -screenSize.x / 2 && screenPos.x <= screenSize.x / 2
@@ -227,6 +260,12 @@ public class SpeechBubbleControl : MonoBehaviour
     {
         mBackgroundSpr.depth = depth;
         mText.mLabel.depth = depth + 1;
+    }
+
+    public void SetToBasicDepth()
+    {
+        mBackgroundSpr.depth = mBasicDepth;
+        mText.mLabel.depth = mBasicDepth + 1;
     }
 
     private void ShowReservedStr()

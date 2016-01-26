@@ -14,6 +14,11 @@ public class EntranceTrigger : UITrigger
     private float mOriDeg = 0f;
     #endregion
 
+    void Start()
+    {
+        mSpeed = GameDirector.Instance.mEventSpeed;
+    }
+
     public override void Act()
     {
         Entrance ent = null;
