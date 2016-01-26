@@ -125,7 +125,16 @@ public class SmooothCamera : Singletone<SmooothCamera>
             }
             yield return null;
         }
+    }
+
+    public void InBuildingCamera()
+    {
         mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default"));
+    }
+
+    public void InBuildingCameraWall()
+    {
+        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default") | (1 << LayerMask.NameToLayer("ExternBuilding")));
     }
 
     public void OutBuilding()
@@ -161,7 +170,7 @@ public class SmooothCamera : Singletone<SmooothCamera>
 
     public void OutBuildingCamera()
     {
-        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("ExternBuilding"));
+        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("ExternBuilding") | (1 << LayerMask.NameToLayer("ExternBuildingWall")));
     }
 
     public void CircularMovementTo(float fDeg, float fAngularSpeed, Transform fTra)
@@ -219,12 +228,6 @@ public class SmooothCamera : Singletone<SmooothCamera>
         mOffset = transform.position - fTra.transform.position;
         mOriEular = oriEular;
         mUpdate = true;
-    }
-
-    public void GotoOri()
-    {
-        mOffset = mOriOffset;
-        transform.eulerAngles = mOriEular;
     }
     #endregion
 }

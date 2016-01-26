@@ -72,6 +72,7 @@ public class EntranceTrigger : UITrigger
         yield return new WaitForSeconds(0.3f);
         mCamera.InBuildingSmooth();
 
+        SmooothCamera.Instance.InBuildingCameraWall();
         float targetZ = mLoader.CurBuiding.GetComponent<BuildingControl>().mExit.transform.position.z;
         while (player.transform.position.z <= targetZ)
         {
@@ -82,6 +83,7 @@ public class EntranceTrigger : UITrigger
             yield return null;
         }
         
+        SmooothCamera.Instance.InBuildingCamera();
         tRot.enabled = true;
         tRot.from = player.transform.localEulerAngles;
         tRot.to = new Vector3(player.transform.localEulerAngles.x, mOriDeg, player.transform.localEulerAngles.z);
@@ -95,21 +97,6 @@ public class EntranceTrigger : UITrigger
         mLoader.CurExternBuildingControl.Animator.SetBool("Opened", false);
         mPCon.mCheckAni = true;
         StopAllCoroutines();
-    }
-
-    public void DoorOpening()
-    {
-        StopAllCoroutines();
-        mAnimator.SetBool("Player_Run", false);
-    }
-
-    /// <summary>
-    /// 문이 열리고 다시 걷기 시작한다.
-    /// </summary>
-    public void StartWalkingAgain()
-    {
-        mAnimator.SetBool("Player_Run", true);
-        StartCoroutine(WalkInBuilding());
     }
 
     /// <summary>

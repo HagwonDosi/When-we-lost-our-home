@@ -105,19 +105,19 @@ public class Stair : MonoBehaviour
 
         if (up)
         {
-            Vector3 dif = mDown.position - fObj.position;
+            Vector3 dif = fObj.position - mDown.position;
             Debug.Log("dif " + dif);
 
-            oriPos = mDown.position - dif;
-            targetPos = mUp.position - dif;
+            oriPos = mDown.position + dif;
+            targetPos = mUp.position + dif;
         }
         else
         {
-            Vector3 dif = mUp.position - fObj.position;
+            Vector3 dif = fObj.position - mUp.position;
             Debug.Log("dif " + dif);
 
-            oriPos = mUp.position - dif;
-            targetPos = mDown.position - dif;
+            oriPos = mUp.position + dif;
+            targetPos = mDown.position + dif;
         }
 
         TweenRotation tRot = fObj.GetComponent<TweenRotation>();
@@ -142,12 +142,17 @@ public class Stair : MonoBehaviour
 
         float sec = 0f;
         float rate = 0f;
-        while(rate <= 1f)
+        while(true)
         {
             sec += Time.deltaTime;
             rate = sec / 2f;
             fObj.position = Vector3.Lerp(oriPos, targetPos, rate);
-
+            
+            if(rate >= 1f)
+            {
+                fObj.position = Vector3.Lerp(oriPos, targetPos, 1f);
+                break;
+            }
             yield return null;
         }
 

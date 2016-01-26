@@ -14,6 +14,11 @@ public class QuitTrigger : UITrigger
     private TweenRotation mTRot = null;
     private GameObject mPlayer = null;
 
+    void Start()
+    {
+        mSpeed = GameDirector.Instance.mEventSpeed;
+    }
+
     public override void Act()
     {
         mBuilCon = BuildingLoader.Instance.CurBuiding.GetComponent<BuildingControl>();
@@ -35,18 +40,18 @@ public class QuitTrigger : UITrigger
         
 
         mTRot.to = new Vector3(mPlayer.transform.localEulerAngles.x, target, mPlayer.transform.localEulerAngles.z);
-        mTRot.duration = 0.3f;
+        mTRot.duration = 0.6f;
         mTRot.ResetToBeginning();
 
         SmooothCamera.Instance.OutBuildingCamera();
-        SmooothCamera.Instance.CircularMovementTo(180, 8.5f, mPCon.transform);
+        SmooothCamera.Instance.CircularMovementTo(180, 5f, mPCon.transform);
         UIDirector.Instance.SetEnabledUILayer(0, false);
         StartCoroutine(WalkFront1());
     }
 
     private IEnumerator WalkFront1()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.6f);
 
         float targetZ = BuildingLoader.Instance.CurEntrace.transform.position.z - 0.1f;
         while (mPlayer.transform.localPosition.z >= targetZ)
@@ -64,17 +69,17 @@ public class QuitTrigger : UITrigger
 
     private IEnumerator WalkFront2()
     {
-        SmooothCamera.Instance.CircularMovementTo(180, 8.5f, mPCon.transform);
+        SmooothCamera.Instance.CircularMovementTo(180, 5f, mPCon.transform);
         StartCoroutine(ReserveSmoothOutBuilding());
         Destroy(mLoader.CurBuiding);
 
         mTRot.enabled = true;
         mTRot.from = mPlayer.transform.localEulerAngles;
         mTRot.to = new Vector3(mPlayer.transform.localEulerAngles.x, mOriDeg, mPlayer.transform.localEulerAngles.z);
-        mTRot.duration = 0.3f;
+        mTRot.duration = 0.6f;
         mTRot.ResetToBeginning();
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.6f);
         
         UIDirector.Instance.SetEnabledUILayer(0, true);
         mPCon.mCheckAni = true;
@@ -84,7 +89,7 @@ public class QuitTrigger : UITrigger
 
     private IEnumerator ReserveSmoothOutBuilding()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.6f);
 
         SmooothCamera.Instance.OutBuildingSmooth();
     }
