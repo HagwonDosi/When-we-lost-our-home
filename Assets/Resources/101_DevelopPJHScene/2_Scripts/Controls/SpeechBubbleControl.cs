@@ -195,7 +195,7 @@ public class SpeechBubbleControl : MonoBehaviour
 
         Vector2 oriPos = mBackgroundSpr.transform.localPosition;
         float x = mWidget.transform.localPosition.x + (150f / 2);
-        float y = mWidget.transform.localPosition.y + (mWidget.height / 2);
+        float y = mWidget.transform.localPosition.y + (mWidget.height / 2) + 10;
         Vector2 LOriPos = new Vector2(x, y);
         float left = 0;
         float right = 0;

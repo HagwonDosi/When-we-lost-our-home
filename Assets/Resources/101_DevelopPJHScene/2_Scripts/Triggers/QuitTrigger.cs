@@ -16,7 +16,7 @@ public class QuitTrigger : UITrigger
 
     public override void Act()
     {
-        mBuilCon = FindObjectOfType<BuildingControl>();
+        mBuilCon = BuildingLoader.Instance.CurBuiding.GetComponent<BuildingControl>();
         mPlayer = GameDirector.Instance.Player;
         mTRot = mPlayer.GetComponent<TweenRotation>();
         mPCon.mCheckAni = false;
@@ -37,7 +37,9 @@ public class QuitTrigger : UITrigger
         mTRot.to = new Vector3(mPlayer.transform.localEulerAngles.x, target, mPlayer.transform.localEulerAngles.z);
         mTRot.duration = 0.3f;
         mTRot.ResetToBeginning();
-        
+
+        SmooothCamera.Instance.OutBuildingCamera();
+        SmooothCamera.Instance.CircularMovementTo(180, 8.5f, mPCon.transform);
         UIDirector.Instance.SetEnabledUILayer(0, false);
         StartCoroutine(WalkFront1());
     }
@@ -46,7 +48,7 @@ public class QuitTrigger : UITrigger
     {
         yield return new WaitForSeconds(0.3f);
 
-        float targetZ = mPlayer.transform.localPosition.z - 0.5f;
+        float targetZ = BuildingLoader.Instance.CurEntrace.transform.position.z - 0.1f;
         while (mPlayer.transform.localPosition.z >= targetZ)
         {
             Vector3 local = mPlayer.transform.localPosition;
@@ -62,18 +64,9 @@ public class QuitTrigger : UITrigger
 
     private IEnumerator WalkFront2()
     {
-        mCamera.OutBuilding();
-        mBuilCon.PlayerExit();
-
-        float targetZ = mPlayer.transform.localPosition.z - 0.5f;
-        while (mPlayer.transform.localPosition.z >= targetZ)
-        {
-            Vector3 local = mPlayer.transform.localPosition;
-            local.z -= Time.deltaTime * 62.5f * mSpeed;
-            mPlayer.transform.localPosition = local;
-
-            yield return new WaitForFixedUpdate();
-        }
+        SmooothCamera.Instance.CircularMovementTo(180, 8.5f, mPCon.transform);
+        StartCoroutine(ReserveSmoothOutBuilding());
+        Destroy(mLoader.CurBuiding);
 
         mTRot.enabled = true;
         mTRot.from = mPlayer.transform.localEulerAngles;
@@ -82,11 +75,17 @@ public class QuitTrigger : UITrigger
         mTRot.ResetToBeginning();
 
         yield return new WaitForSeconds(0.3f);
-
+        
         UIDirector.Instance.SetEnabledUILayer(0, true);
-        StopAllCoroutines();
         mPCon.mCheckAni = true;
-        Destroy(mLoader.CurBuiding);
         mAnimatr.SetFloat("Speed", 0f);
+        StopAllCoroutines();
+    }
+
+    private IEnumerator ReserveSmoothOutBuilding()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        SmooothCamera.Instance.OutBuildingSmooth();
     }
 }
