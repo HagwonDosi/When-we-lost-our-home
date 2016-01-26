@@ -14,10 +14,13 @@ public class SmooothCamera : Singletone<SmooothCamera>
     /// Z좌표로 따라갈 것인지
     /// </summary>
     public bool mZTrack = true;
+    public bool mUpdate = true;
 
     private Camera mCamera = null;
     private Camera mUICamera = null;
     private float mFieldOfView = 0f;
+    private Vector3 mOriOffset = Vector3.zero;
+    private Vector3 mOriEular = Vector3.zero;
     #endregion
 
     #region Capsules
@@ -35,6 +38,20 @@ public class SmooothCamera : Singletone<SmooothCamera>
             return mUICamera;
         }
     }
+    public Vector3 OriOffset
+    {
+        get
+        {
+            return mOriOffset;
+        }
+    }
+    public Vector3 OriEularAngles
+    {
+        get
+        {
+            return mOriEular;
+        }
+    }
 
     #endregion
 
@@ -50,8 +67,11 @@ public class SmooothCamera : Singletone<SmooothCamera>
 
     void Update()
     {
-        MoveCamera();
-        SyncFieldOfView();
+        if(mUpdate)
+        {
+            MoveCamera();
+            SyncFieldOfView();
+        }
     }
     #endregion
 
@@ -93,7 +113,7 @@ public class SmooothCamera : Singletone<SmooothCamera>
         while(true)
         {
             sec += Time.deltaTime;
-            float rate = sec / 1f;
+            float rate = sec / 2f;
             mOffset = new Vector3(0, 0.8f, CustomMath.TweenValue(-2.26f, -1.4f, rate));
             mFieldOfView = CustomMath.TweenValue(52f, 66f, rate);
 
@@ -110,9 +130,101 @@ public class SmooothCamera : Singletone<SmooothCamera>
 
     public void OutBuilding()
     {
-        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("ExternBuilding"));
         mOffset = new Vector3(0, 0.8f, -2.26f);
         mFieldOfView = 52f;
+    }
+
+    public void OutBuildingSmooth()
+    {
+        StartCoroutine(CorOutBuildingSmooth());
+    }
+
+    private IEnumerator CorOutBuildingSmooth()
+    {
+        float sec = 0f;
+        while (true)
+        {
+            sec += Time.deltaTime;
+            float rate = sec / 0.3f;
+            mOffset = new Vector3(0, 0.8f, CustomMath.TweenValue(-1.4f, -2.25f, rate));
+            mFieldOfView = CustomMath.TweenValue(66, 52, rate);
+
+            Debug.Log("Offset " + mOffset);
+            if (rate >= 1f)
+            {
+                StopCoroutine(CorOutBuildingSmooth());
+                break;
+            }
+            yield return null;
+        }
+    }
+
+    public void OutBuildingCamera()
+    {
+        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("ExternBuilding"));
+    }
+
+    public void CircularMovementTo(float fDeg, float fAngularSpeed, Transform fTra)
+    {
+        mUpdate = false;
+        StartCoroutine(CorCircularMovementTo(fDeg, fAngularSpeed, fTra));
+    }
+
+    private IEnumerator CorCircularMovementTo(float fDeg, float fAngularSpeed, Transform fTra)
+    {
+        Vector2 oriPos = new Vector2(fTra.position.x, fTra.position.z);
+        float xDif = transform.position.x - fTra.position.x;
+        float zDif = transform.position.z - fTra.position.z;
+        float rad = Mathf.Sqrt(xDif * xDif + zDif * zDif);
+        Vector3 oriEular = transform.eulerAngles;
+        Debug.Log("oriEular " + oriEular);
+
+        float curDeg = Mathf.Atan2(zDif, xDif) * Mathf.Rad2Deg;
+
+        if (curDeg < 0)
+            curDeg += 360;
+        float oriDeg = curDeg;
+
+        while (true)
+        {
+            curDeg += fAngularSpeed;
+            float x = Mathf.Cos(curDeg * Mathf.Deg2Rad) * rad;
+            float y = Mathf.Sin(curDeg * Mathf.Deg2Rad) * rad;
+            Vector2 circlePos = new Vector2(fTra.position.x, fTra.position.z) + new Vector2(x, y);
+            transform.position = new Vector3(circlePos.x, transform.position.y, circlePos.y);
+            Vector3 eul = oriEular;
+            eul.y -= curDeg - oriDeg;
+            transform.eulerAngles = eul;
+
+            if (curDeg >= oriDeg + fDeg)
+            {
+                curDeg = oriDeg + fDeg;
+                Debug.Log("end curDeg " + curDeg);
+
+                x = Mathf.Cos(curDeg * Mathf.Deg2Rad) * rad;
+                y = Mathf.Sin(curDeg * Mathf.Deg2Rad) * rad;
+                circlePos = new Vector2(fTra.position.x, fTra.position.z) + new Vector2(x, y);
+                transform.position = new Vector3(circlePos.x, transform.position.y, circlePos.y);
+                eul = oriEular;
+                eul.y -= curDeg - oriDeg;
+                transform.eulerAngles = eul;
+
+                break;
+            }
+
+            yield return null;
+        }
+
+        mOriOffset = mOffset;
+        mOffset = transform.position - fTra.transform.position;
+        mOriEular = oriEular;
+        mUpdate = true;
+    }
+
+    public void GotoOri()
+    {
+        mOffset = mOriOffset;
+        transform.eulerAngles = mOriEular;
     }
     #endregion
 }

@@ -70,15 +70,31 @@ public class EntranceTrigger : UITrigger
         
         
         yield return new WaitForSeconds(0.3f);
-        
-        while(true)
+        mCamera.InBuildingSmooth();
+
+        float targetZ = mLoader.CurBuiding.GetComponent<BuildingControl>().mExit.transform.position.z;
+        while (player.transform.position.z <= targetZ)
         {
             Vector3 local = player.transform.position;
             local.z += Time.deltaTime * 62.5f * mSpeed;
             player.transform.position = local;
 
-            yield return new WaitForFixedUpdate();
+            yield return null;
         }
+        
+        tRot.enabled = true;
+        tRot.from = player.transform.localEulerAngles;
+        tRot.to = new Vector3(player.transform.localEulerAngles.x, mOriDeg, player.transform.localEulerAngles.z);
+        tRot.duration = 0.3f;
+        tRot.ResetToBeginning();
+
+        yield return new WaitForSeconds(0.3f);
+
+        UIDirector.Instance.SetEnabledUILayer(0, true);
+        mAnimator.SetBool("Player_Run", false);
+        mLoader.CurExternBuildingControl.Animator.SetBool("Opened", false);
+        mPCon.mCheckAni = true;
+        StopAllCoroutines();
     }
 
     public void DoorOpening()

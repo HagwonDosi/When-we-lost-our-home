@@ -29,7 +29,7 @@ public class ExternBuildingConEnt
     }
 }
 
-public class BuildingLoader : MonoBehaviour
+public class BuildingLoader : Singletone<BuildingLoader>
 {
     #region Variables
     private Dictionary<string, ExternBuildingConEnt> mBuildingConInfo = new Dictionary<string, ExternBuildingConEnt>();
@@ -40,6 +40,8 @@ public class BuildingLoader : MonoBehaviour
     private ExternBuildingControl mCurExternBuilding = null;
     [SerializeField]
     private GameObject mExit = null;
+    [SerializeField]
+    private Entrance mEntrance = null;
     #endregion
 
     #region Capsule
@@ -55,6 +57,13 @@ public class BuildingLoader : MonoBehaviour
         get
         {
             return mCurExternBuilding;
+        }
+    }
+    public Entrance CurEntrace
+    {
+        get
+        {
+            return mEntrance;
         }
     }
 
@@ -107,6 +116,7 @@ public class BuildingLoader : MonoBehaviour
                 building.GetComponent<BuildingControl>().mBuildingName = fMapName;
                 mCurExternBuilding = conEnt.ExtCon;
                 mCurBuilding = building;
+                mEntrance = conEnt.Ent;
                 NPCDirector.Instance.MapLoaded(fMapName, mCurBuilding.GetComponent<BuildingControl>());
                 //mCurBuilding.GetComponent<BuildingControl>().SetPlayer();
             }
