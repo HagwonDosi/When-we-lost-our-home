@@ -1,0 +1,54 @@
+﻿Revert "init"
+
+This reverts commit bdd9054c76a724d5dc4f8cb022ba12622154b177.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch Add-Inventory
+# Your branch is ahead of 'origin/Add-Inventory' by 2 commits.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	deleted:    Assets/Resources/001_LogoScene.meta
+#	deleted:    Assets/Resources/001_LogoScene/2_Scripts.meta
+#	deleted:    Assets/Resources/001_LogoScene/2_Scripts/0_Scene.meta
+#	deleted:    Assets/Resources/002_MainScene.meta
+#	deleted:    Assets/Resources/002_MainScene/2_Scripts.meta
+#	deleted:    Assets/Resources/002_MainScene/2_Scripts/0_Scene.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/0_Atlases.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/0_Atlases/Interaction_Sprite.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/0_Atlases/Inventory_Sprite.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/0_Atlases/UI_Sprite.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/1_Prefabs/DevelopPrefabs.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/1_Prefabs/NPCPrefabs.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/2_Scripts/Controls.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/2_Scripts/Managers.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/2_Scripts/Triggers.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/6_Textures.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/7_Shader.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/Charactor.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/Door.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/monster.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/monster/mon.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/monster/mon2.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/npc1.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/out.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/out/home1.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/out/home1/Materials.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/out/home2.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/out/home2/Materials.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/out/hospital.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/out/mart.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/out/mart/Materials.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/out/myhome.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/out/npchome.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/out/school.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/out/school/Materials.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/school.meta
+#	deleted:    Assets/Resources/101_DevelopPJHScene/8_Models/school/Materials.meta
+#	deleted:    Assets/Resources/103_DevelopSHJSceneScene/8_Sprites.meta
+#	deleted:    Assets/Resources/DataFiles/Map.meta
+#	deleted:    Assets/Resources/Models.meta
+#	deleted:    Assets/Resources/Models/Materials.meta
+#
+
