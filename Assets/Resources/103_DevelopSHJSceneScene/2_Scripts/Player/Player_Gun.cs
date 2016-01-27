@@ -36,7 +36,7 @@ public class Player_Gun : MonoBehaviour {
         gun_bullet.transform.localPosition = Vector3.zero;
         gun_bullet.transform.parent = Gun_pool.transform;
         gun_bullet.GetComponent<Bullet>().Creat_Bullet(Facin);
-
+        gun_bullet.GetComponent<DestroyXLimit>().mXLimit = Mathf.Abs(gun_bullet.transform.localPosition.x) + 10f;
 
     }
     

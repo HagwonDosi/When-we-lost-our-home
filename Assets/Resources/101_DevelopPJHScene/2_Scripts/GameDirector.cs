@@ -3,8 +3,22 @@ using System.Collections;
 
 public class GameDirector : MonoBehaviour
 {
+    #region Variables
+    public float mEventSpeed = 0.02f;
+
     private static GameDirector mInstance = null;
 
+    [SerializeField]
+    private UIRoot mRoot = null;
+    [SerializeField]
+    private UIPanel mPanel = null;
+    [SerializeField]
+    private GameObject mPlayer = null;
+    [SerializeField]
+    private InvenData mPlayerInven = null;
+    #endregion
+
+    #region get/setter
     public static GameDirector Instance
     {
         get
@@ -15,16 +29,28 @@ public class GameDirector : MonoBehaviour
             return mInstance;
         }
     }
-
-    public UIRoot mRoot = null;
-    public UIPanel mPanel = null;
-
-	// Use this for initialization
-	void Start ()
+    public GameObject Player
     {
-	
-	}
-	
+        get
+        {
+            return mPlayer;
+        }
+    }
+    public InvenData PlayerInven
+    {
+        get
+        {
+            return mPlayerInven;
+        }
+    }
+
+    #endregion
+
+    #region VirtualFuntions
+    #endregion
+
+    #region CustomFunctions
+
     public Vector2 getPanelSize()
     {
         Vector2 size = new Vector2();
@@ -34,4 +60,19 @@ public class GameDirector : MonoBehaviour
 
         return size;
     }
+
+    
+    static public T CustomGetComponent<T>(GameObject obj) where T : Component
+    {
+        T com = obj.GetComponent<T>();
+
+        if(com == null)
+        {
+            Debug.Log(typeof(T).ToString() + "was not found in " + obj.name);
+            com = obj.AddComponent<T>();
+        }
+
+        return com;
+    }
+    #endregion
 }

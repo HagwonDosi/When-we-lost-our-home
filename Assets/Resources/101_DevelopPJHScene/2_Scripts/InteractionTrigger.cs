@@ -12,17 +12,21 @@ public struct InteractionTriggerInfo
 
 public class InteractionTrigger : MonoBehaviour
 {
+    #region Variables
     public List<InteractionTriggerInfo> mTriggerInfo;
 
     private UISprite mSprite = null;
     private UITrigger mTrigger = null;
+    private Collider mCollider = null;
     private Dictionary<InteractionType, InteractionTriggerInfo> mTriggerInfoDic = new Dictionary<InteractionType, InteractionTriggerInfo>();
+    #endregion
 
-	// Use this for initialization
-	void Start ()
+    #region VirtualFunctions
+    // Use this for initialization
+    void Start ()
     {
+        mCollider = GetComponent<Collider>();
         mSprite = GetComponent<UISprite>();
-
         mSprite.alpha = 0;
 
 	    foreach(var iter in mTriggerInfo)
@@ -30,8 +34,10 @@ public class InteractionTrigger : MonoBehaviour
             mTriggerInfoDic.Add(iter.mType, iter);
         }
 	}
+    #endregion
 
-    public void OnPress()
+    #region CustomFunctions
+    public void OnRelease()
     {
         if (mTrigger != null)
             mTrigger.Act();
@@ -41,19 +47,30 @@ public class InteractionTrigger : MonoBehaviour
 
     public void InteractionTriggerEnter(InteractionControl fCon)
     {
+        mCollider.enabled = true;
         InteractionTriggerInfo getInfo;
 
         mTriggerInfoDic.TryGetValue(fCon.mType, out getInfo);
 
         mSprite.spriteName = getInfo.mSpriteName;
         mSprite.alpha = 1;
+        Vector3 oriScale = mSprite.transform.localScale;
+        mSprite.MakePixelPerfect();
+        mSprite.transform.localScale = oriScale;
 
         mTrigger = getInfo.mTrigger;
     }
 
     public void InteractionTriggerExit()
     {
+        mCollider.enabled = false;
         mSprite.alpha = 0;
         mTrigger = null;
     }
+
+    public void SwitchInteractionSprite(string spriteName)
+    {
+        mSprite.spriteName = spriteName;
+    }
+    #endregion
 }

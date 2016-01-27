@@ -32,8 +32,8 @@ public class InvenData : MonoBehaviour
     {
         if (BagLevel * 9 <= Count_Item)
         {
-            return;
             Debug.Log("Up");
+            return;
         }
         Debug.Log(item);
         Count_Item += 1;
@@ -47,8 +47,7 @@ public class InvenData : MonoBehaviour
     /// <param name="item">아이템의 스트링</param>
     public void RemoveItem(string item)
     {
-        Debug.Log("remove");
-        Debug.Log(item);
+        Debug.Log("remove " + item);
         items.Remove(item);
         Count_Item -= 1;
     }

@@ -17,12 +17,17 @@ public class Popinven : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator SyncListItem()
     {
+        while (true)
+        {
+            MakeItem();
+
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 
     public void Item_Chek()
@@ -32,40 +37,36 @@ public class Popinven : MonoBehaviour
 
     public void OpenInven() //인벤토리를 만듭니다.
     {
+        UIDirector.Instance.SetEnabledUILayer(0, false);
         Bage_Size = mData.BageSize;
-        for (int i = 0; i < Bage_Size; )
-        {
-            Item_image[i].spriteName = "Gear";
-            i++;
-        }
 
-            Item_Chek();
+        Item_Chek();
         inventory.transform.localPosition = new Vector3(0, 0, 0);
-        MakeItem();
-        //GameObject Inven = (GameObject)Instantiate(inventory);
-
-        //Inven.transform.parent
-        //= GameObject.Find("CC_Offset").transform;
-
-        //Inven.transform.localPosition =
-        //    new Vector3(0, 0, 0);
-        //Inven.transform.localScale = Vector3.one;
+        StartCoroutine(SyncListItem());
     }
 
     int chek = 0; // 아래 MakeItem이 몇번 돌아갔는지 체크
 
     public void MakeItem()
     {
+        Item_Info = mData.Items;
+        for (int i = 0; i < Bage_Size;)
+        {
+            Item_image[i].spriteName = "Gear";
+            i++;
+        }
 
         foreach (var iter in Item_Info)
         {
-            if(iter == "SmokedFood")
+            if (iter == "SmokedFood")
             {
                 Item_image[chek].spriteName = "SmokedFood";
+                Item_image[chek].GetComponent<ItemInfo>().Item_Name = iter;
             }
             if (iter == "CannedFood")
             {
                 Item_image[chek].spriteName = "CannedFood";
+                Item_image[chek].GetComponent<ItemInfo>().Item_Name = iter;
             }
 
             chek++;

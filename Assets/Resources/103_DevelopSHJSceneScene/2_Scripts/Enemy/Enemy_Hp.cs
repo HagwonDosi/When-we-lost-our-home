@@ -4,7 +4,7 @@ using System.Collections;
 public class Enemy_Hp : BarControl
 {
 
-    public Enemy_State mEnemy = null;
+    public EnemyStatus mEnemy = null;
 
     // Use this for initialization
     void Start() {
