@@ -29,14 +29,14 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
     {
         var cons = FindObjectsOfType<SpeechBubbleControl>();
 
-        for(int i = 0; i < cons.Length; i++)
+        for (int i = 0; i < cons.Length; i++)
         {
             mControlList.Add(cons[i]);
         }
 
         var convs = FindObjectsOfType<ConversationFileControl>();
 
-        for(int i = 0; i < convs.Length; i++)
+        for (int i = 0; i < convs.Length; i++)
         {
             mConvDic.Add(new string(convs[i].FileName.ToCharArray(), 0, convs[i].FileName.Length - 4), convs[i]);
         }
@@ -51,7 +51,7 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
     #region CustomFunctions
     private void TouchedBubblesDepthControl()
     {
-        if(mTouchedBubbles.Count >= 1)
+        if (mTouchedBubbles.Count >= 1)
         {
             foreach (var iter in mControlList)
             {
@@ -60,7 +60,7 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
 
             Debug.Log("start update");
             int upDepth = mCurDepth + 2;
-            foreach(var iter in mTouchedBubbles)
+            foreach (var iter in mTouchedBubbles)
             {
                 iter.Value.SetDepth(upDepth);
                 break;
@@ -68,7 +68,7 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
 
             mTouchedBubbles.Clear();
         }
-        
+
     }
 
     public SpeechBubbleControl MakeSpeechBubble(Transform fObj, Vector2 fOffset)
@@ -99,7 +99,7 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
 
     public bool RemoveSpeechBubble(int fIdx)
     {
-        if(fIdx >= 0 && fIdx < mControlList.Count)
+        if (fIdx >= 0 && fIdx < mControlList.Count)
         {
             Destroy(mControlList[fIdx].gameObject);
             mControlList.RemoveAt(fIdx);
@@ -118,6 +118,26 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
         mTouchedBubbles.Add(fCon.CurDepth, fCon);
     }
 
+    public string GetConversationString(string fConvName, int fIndex)
+    {
+        ConversationFileControl convCon = null;
+        if (mConvDic.TryGetValue(fConvName, out convCon))
+        {
+            if (fIndex < 0 || fIndex >= convCon.ConvsList.Count)
+            {
+                Debug.LogWarning(name + ".SpeechBubbleDirector.GetConversationString() " + "fConvIdx is out of Range");
+                return "";
+            }
+
+            return convCon.ConvsList[fIndex];
+        }
+        else
+        {
+            Debug.LogWarning(name + ".SpeechBubbleDirector.GetConversationString() " + "couldn't find ConvCon");
+            return "";
+        }
+    }
+
     /// <summary>
     /// 지정하는 말풍선에 텍스트를 표시하는 스크립트
     /// </summary>
@@ -127,7 +147,7 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
     /// <param name="fDuration">표시할 시간</param>
     public void ShowText(int fSpeechIdx, string fConvName, int fConvIdx, float fDuration)
     {
-        if(mSpeechBubbleShow)
+        if (mSpeechBubbleShow)
         {
             if (fSpeechIdx < 0 || fSpeechIdx >= mControlList.Count)
             {
@@ -165,6 +185,52 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
                 fCon.ShowText(convCon.ConvsList[fConvIdx], fDuration);
             }
         }
+    }
+
+    /// <summary>
+    /// 지정하는 말풍선에 표시할 텍스트를 예약하는 함수
+    /// </summary>
+    /// <param name="fSec">예약할 시간</param>
+    /// <param name="fCon">표시할 말풍선</param>
+    /// <param name="fConvName">파일 이름</param>
+    /// <param name="fConvIdx">표시할 말풍선 인덱스</param>
+    /// <param name="fDuration">표시할 시간</param>
+    public void ShowText(float fSec, SpeechBubbleControl fCon, string fConvName, int fConvIdx, float fDuration)
+    {
+        if (mSpeechBubbleShow)
+        {
+            StartCoroutine(ReserveShowText(fSec, fCon, fConvName, fConvIdx, fDuration));
+        }
+    }
+
+    /// <summary>
+    /// 지정하는 말풍선에 표시할 텍스트를 예약하는 함수
+    /// </summary>
+    /// <param name="fSec">예약할 시간</param>
+    /// <param name="fSpeechIdx">표시할 말풍선의 인덱스</param>
+    /// <param name="fConvName">대화 파일</param>
+    /// <param name="fConvIndx">대사 인덱스</param>
+    /// <param name="fDuration">표시할 시간</param>
+    public void ShowText(float fSec, int fSpeechIdx, string fConvName, int fConvIdx, float fDuration)
+    {
+        if(mSpeechBubbleShow)
+        {
+            StartCoroutine(ReserveShowText(fSec, fSpeechIdx, fConvName, fConvIdx, fDuration));
+        }
+    }
+    
+    private IEnumerator ReserveShowText(float fSec, SpeechBubbleControl fCon, string fConvName, int fConvIdx, float fDuration)
+    {
+        yield return new WaitForSeconds(fSec);
+
+        ShowText(fCon, fConvName, fConvIdx, fDuration);
+    }
+    
+    private IEnumerator ReserveShowText(float fsec, int fSpeechIdx, string fConvName, int fConvIdx, float fDuration)
+    {
+        yield return new WaitForSeconds(fsec);
+
+        ShowText(fSpeechIdx, fConvName, fConvIdx, fDuration);
     }
     #endregion
 }

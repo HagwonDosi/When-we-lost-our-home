@@ -66,7 +66,7 @@ public class Stair : MonoBehaviour
         tRot.duration = 0.3f;
         tRot.ResetToBeginning();
 
-        mOriginalZ = fObj.transform.localPosition.z;
+        mOriginalZ = fObj.transform.position.z;
         //위와 아래 중에서 어디에 더 가까운지 거리로 확인
         float upYDif = Vector3.Distance(fObj.transform.position, mUp.position);
         float downYDif = Vector3.Distance(fObj.transform.position, mDown.position);
@@ -106,7 +106,7 @@ public class Stair : MonoBehaviour
         if (up)
         {
             Vector3 dif = fObj.position - mDown.position;
-            Debug.Log("dif " + dif);
+            Debug.Log("dif(" + dif.x + ", " + dif.y + ", " + dif.z + ")");
 
             oriPos = mDown.position + dif;
             targetPos = mUp.position + dif;
@@ -114,7 +114,7 @@ public class Stair : MonoBehaviour
         else
         {
             Vector3 dif = fObj.position - mUp.position;
-            Debug.Log("dif " + dif);
+            Debug.Log("dif(" + dif.x + ", " + dif.y + ", " + dif.z + ")");
 
             oriPos = mUp.position + dif;
             targetPos = mDown.position + dif;

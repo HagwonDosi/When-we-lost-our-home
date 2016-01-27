@@ -134,7 +134,7 @@ public class SmooothCamera : Singletone<SmooothCamera>
 
     public void InBuildingCameraWall()
     {
-        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default") | (1 << LayerMask.NameToLayer("ExternBuilding")));
+        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default") | (1 << LayerMask.NameToLayer("ExternBuilding") | (1 << LayerMask.NameToLayer("Road"))));
     }
 
     public void OutBuilding()
@@ -168,9 +168,14 @@ public class SmooothCamera : Singletone<SmooothCamera>
         }
     }
 
+    public void OutBuildingCameraWall()
+    {
+        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("ExternBuilding") | (1 << LayerMask.NameToLayer("Road")));
+    }
+
     public void OutBuildingCamera()
     {
-        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("ExternBuilding") | (1 << LayerMask.NameToLayer("ExternBuildingWall")));
+        mCamera.cullingMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("ExternBuilding") | (1 << LayerMask.NameToLayer("ExternBuildingWall")) | (1 << LayerMask.NameToLayer("Road")));
     }
 
     public void CircularMovementTo(float fDeg, float fAngularSpeed, Transform fTra)

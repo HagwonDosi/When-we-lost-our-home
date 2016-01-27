@@ -190,6 +190,7 @@ public class SpeechBubbleControl : MonoBehaviour
     void SetBackgroundSprite(string fStr)
     {
         Vector2 size = mText.getFullSize(fStr);
+        Debug.Log("size " + size);
         mWidget.width = (int)(size.x) + 150;
         mWidget.height = (int)(size.y) + 100;
 

@@ -43,7 +43,7 @@ public class QuitTrigger : UITrigger
         mTRot.duration = 0.6f;
         mTRot.ResetToBeginning();
 
-        SmooothCamera.Instance.OutBuildingCamera();
+        SmooothCamera.Instance.OutBuildingCameraWall();
         SmooothCamera.Instance.CircularMovementTo(180, 5f, mPCon.transform);
         UIDirector.Instance.SetEnabledUILayer(0, false);
         StartCoroutine(WalkFront1());
@@ -54,7 +54,7 @@ public class QuitTrigger : UITrigger
         yield return new WaitForSeconds(0.6f);
 
         float targetZ = BuildingLoader.Instance.CurEntrace.transform.position.z - 0.1f;
-        while (mPlayer.transform.localPosition.z >= targetZ)
+        while (mPlayer.transform.position.z >= targetZ)
         {
             Vector3 local = mPlayer.transform.localPosition;
             local.z -= Time.deltaTime * 62.5f * mSpeed;
@@ -63,6 +63,7 @@ public class QuitTrigger : UITrigger
             yield return new WaitForFixedUpdate();
         }
 
+        SmooothCamera.Instance.OutBuildingCamera();
         StopAllCoroutines();
         StartCoroutine(WalkFront2());
     }
