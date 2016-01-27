@@ -30,7 +30,7 @@ public class InvenData : MonoBehaviour
     /// <param name="item">아이템의 스트링</param>
     public void AddItem(string item)
     {
-        if (BagLevel * 6 <= Count_Item)
+        if (BagLevel * 9 <= Count_Item)
         {
             return;
             Debug.Log("Up");
@@ -88,7 +88,7 @@ public class InvenData : MonoBehaviour
     {
         get
         {
-            return BagLevel * 6;
+            return BagLevel * 9;
         }
     }
 

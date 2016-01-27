@@ -39,8 +39,9 @@ public class Inventory : MonoBehaviour
         Name = null;
     }
 
-    public void NoRemove()//거절
+    public void NoRemove()//거절,버리기
     {
+        mData.RemoveItem(Name);
         Name = null;
     }
 

@@ -24,6 +24,17 @@ public class Trade : MonoBehaviour
     {
 	    
 	}
+
+    
+    public void SetPList(string Tag1)
+    {
+        Player_Trade.Add(Tag1);
+    }
+
+    public void SetNList(string Tag2)
+    {
+        NPC_Trade.Add(Tag2);
+    }
         
     public void accept()// 거래 함
     {
@@ -37,6 +48,4 @@ public class Trade : MonoBehaviour
        Player_Data.SetList(Player_Trade);
         NPC_Data.SetList(NPC_Trade);
     }
-
-
 }
