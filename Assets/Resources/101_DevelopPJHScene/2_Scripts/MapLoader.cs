@@ -70,7 +70,7 @@ public class MapLoader : MonoBehaviour
         GameObject wall = Instantiate(mWallTemp) as GameObject;
         wall.transform.parent = mBuilding.transform;
 
-        wall.transform.localPosition = new Vector3(mOffset.x * mMagnification, GetYByFloor(fFloor + 1), mOffset.z);
+        wall.transform.localPosition = new Vector3(mOffset.x * mMagnification + fXPos, GetYByFloor(fFloor + 1), mOffset.z);
     }
 
     private void MakeStair (int fFloor, float fXPos)

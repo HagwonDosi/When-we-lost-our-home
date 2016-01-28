@@ -129,7 +129,7 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
                 return "";
             }
 
-            return convCon.ConvsList[fIndex];
+            return mControlList[0].CutString(convCon.ConvsList[fIndex]);
         }
         else
         {
@@ -184,6 +184,10 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
 
                 fCon.ShowText(convCon.ConvsList[fConvIdx], fDuration);
             }
+            else
+            {
+                Debug.LogWarning("Couldn't find Convfile " + fConvName);
+            }
         }
     }
 
@@ -197,6 +201,7 @@ public class SpeechBubbleDirector : Singletone<SpeechBubbleDirector>
     /// <param name="fDuration">표시할 시간</param>
     public void ShowText(float fSec, SpeechBubbleControl fCon, string fConvName, int fConvIdx, float fDuration)
     {
+        Debug.Log("Display Message after " + fSec);
         if (mSpeechBubbleShow)
         {
             StartCoroutine(ReserveShowText(fSec, fCon, fConvName, fConvIdx, fDuration));

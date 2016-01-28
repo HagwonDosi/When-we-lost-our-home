@@ -5,14 +5,13 @@ using System.Collections.Generic;
 public class Popinven : MonoBehaviour
 {
     public GameObject inventory = null;     //인벤토리 프리팹 화면에 띄우기
-
-    private List<string> Item_Info = new List<string>(); // 아이템 리스트
-
     public InvenData mData = null;  // InvenData가져오는 함수
-
     public UISprite[] Item_image = null; // 인벤토리 이미지
 
-    int Bage_Size = 0;
+    [SerializeField]
+    private string mBasicString = "";
+    private int Bage_Size = 0;
+    private List<string> Item_Info = new List<string>(); // 아이템 리스트
 
     // Use this for initialization
     void Start()
@@ -50,9 +49,9 @@ public class Popinven : MonoBehaviour
     public void MakeItem()
     {
         Item_Info = mData.Items;
-        for (int i = 0; i < Bage_Size;)
+        for (int i = 0; i < 9;)
         {
-            Item_image[i].spriteName = "Gear";
+            Item_image[i].spriteName = mBasicString;
             i++;
         }
 

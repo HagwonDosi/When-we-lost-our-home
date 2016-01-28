@@ -164,7 +164,7 @@ public class SpeechBubbleControl : MonoBehaviour
     /// </summary>
     /// <param name="fStr">개행문자를 넣을 문자열</param>
     /// <returns></returns>
-    private string CutString(string fStr)
+    public string CutString(string fStr)
     {
         int cutIdx = 0;
         UIWidget lWidget = mText.mLabel.GetComponent<UIWidget>();
@@ -180,7 +180,6 @@ public class SpeechBubbleControl : MonoBehaviour
                 lWidget.width = 2;
                 cutIdx = i + 1;
                 fStr = fStr.Insert(i, "\n");
-                Debug.Log(fStr);
             }
         }
 
