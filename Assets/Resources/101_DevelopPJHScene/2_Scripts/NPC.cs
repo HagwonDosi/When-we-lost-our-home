@@ -53,7 +53,7 @@ public class NPC : MonoBehaviour
 
         string conv = SpeechBubbleDirector.Instance.GetConversationString("Player", mCurPlayerIndex);
         conv = conv.Replace('\n', '@');
-        float sec = 0.15f * conv.Length;
+        float sec = 0.1f * conv.Length;
         Debug.Log("conv " + conv + " sec " + sec);
         SpeechBubbleDirector.Instance.ShowText(1.2f + sec, mSpeechBubble, mNPCName, mCurConvIndex, 1);
 

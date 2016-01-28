@@ -64,7 +64,7 @@ public class Popinven : MonoBehaviour
             }
             if (iter == "CannedFood")
             {
-                Item_image[chek].spriteName = "CannedFood";
+                Item_image[chek].spriteName = "can";
                 Item_image[chek].GetComponent<ItemInfo>().Item_Name = iter;
             }
 
